@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <string_view>
 #include <iostream>
 #include <sstream>
 #include <type_traits>
@@ -34,9 +35,7 @@ public:
     // shortcuts machinery
     template <typename ...Value>
     void log(Level level, Value&& ...value);
-    void log(Level level, const char* value);
-    template <std::size_t N>
-    void log(Level level, char (&value)[N]);
+    void log(Level level, std::string_view);
 };
 
 template <typename ...Value>
@@ -60,20 +59,12 @@ template <typename ...Value>
 inline void ILogger::log(Level level, Value&& ...value)
 {
     std::ostringstream os;
-    int dummy[sizeof...(Value)] {
-       ((os << std::forward<Value>(value)), 1)...
-    };
+    ((os << std::forward<Value>(value)), ...);
     const std::string& message = os.str();
     log(level, message);
 }
 
-inline void ILogger::log(Level level, const char* value)
-{
-    log(level, std::string(value));
-}
-
-template <std::size_t N>
-inline void ILogger::log(Level level, char (&value)[N])
+inline void ILogger::log(Level level, std::string_view value)
 {
     log(level, std::string(value));
 }
