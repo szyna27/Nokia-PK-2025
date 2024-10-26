@@ -1,15 +1,40 @@
 #pragma once
 
 #include "ILogger.hpp"
+#include <concepts>
 #include <functional>
 
 namespace common
 {
 
+namespace detail
+{
+
+class Prefix
+{
+public:
+    using FunctionT = std::function<void(std::ostream&)>;
+    explicit Prefix(FunctionT const& f)
+        : prefixAdder(f)
+    {}
+
+    template<typename Func>
+    Prefix(Func f) requires (std::convertible_to<Func, FunctionT>)
+        : Prefix(FunctionT{f})
+    {}
+
+    auto operator()(std::ostream& os) const { return prefixAdder(os); }
+
+private:
+    FunctionT prefixAdder;
+};
+
+} // namespace detail
+
 class PrefixedLogger : public ILogger
 {
 public:
-    using Prefix = std::function<void(std::ostream&)>;
+    using Prefix = detail::Prefix;
     PrefixedLogger(ILogger& adaptee, Prefix prefix);
     PrefixedLogger(ILogger& adaptee, const std::string& prefix);
 
@@ -20,4 +45,4 @@ private:
     Prefix prefix;
 };
 
-} // namespace ue
+} // namespace common

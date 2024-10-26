@@ -1,7 +1,7 @@
 macro(set_compiler_options)
 # set(CMAKE_CXX_FLAGS "-std=c++17 -DGTEST_HAS_PTHREAD=1 -g -Og ${CMAKE_CXX_FLAGS}")
 # add_definitions(-std=c++14)
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_FLAGS "-g -Og ${CMAKE_CXX_FLAGS}")
 endmacro()
 
@@ -17,7 +17,7 @@ add_definitions(${Qt5Network_DEFINITIONS})
 endmacro()
 
 macro(target_link_qt)
-set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 17)
+set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 20)
 target_link_libraries(${PROJECT_NAME} ${Qt5Widgets_LIBRARIES} ${Qt5Network_LIBRARIES} pthread)
 endmacro()
 
