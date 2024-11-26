@@ -5,7 +5,7 @@ namespace common
 
 namespace detail
 {
-inline std::ostream& operator << (std::ostream& os, Prefix const& prefix)
+static std::ostream& operator << (std::ostream& os, Prefix const& prefix)
 {
     prefix(os);
     return os;

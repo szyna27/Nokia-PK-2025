@@ -14,13 +14,10 @@ class Prefix
 {
 public:
     using FunctionT = std::function<void(std::ostream&)>;
-    explicit Prefix(FunctionT const& f)
-        : prefixAdder(f)
-    {}
 
-    template<typename Func>
-    Prefix(Func f) requires (std::convertible_to<Func, FunctionT>)
-        : Prefix(FunctionT{f})
+    template<std::convertible_to<FunctionT> Func>
+    Prefix(Func f)
+        : prefixAdder(FunctionT{f})
     {}
 
     auto operator()(std::ostream& os) const { return prefixAdder(os); }

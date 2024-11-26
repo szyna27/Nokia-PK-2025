@@ -1,5 +1,6 @@
 #include "Logger.hpp"
 #include <thread>
+#include <utility>
 #include <sstream>
 
 namespace common
@@ -37,7 +38,7 @@ void Logger::log(Level level, const std::string &message)
          << ",tid:" << thisThreadId
          << levelInfo.prefix
          << ":" << message;
-    auto messageStr = ostr.str();
+    auto messageStr = std::move(ostr).str();
 
     std::unique_lock<std::mutex> lock(printoutGuard);
     for (auto& stream: levelInfo.streams)

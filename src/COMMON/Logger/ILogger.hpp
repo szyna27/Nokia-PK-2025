@@ -60,7 +60,7 @@ inline void ILogger::log(Level level, Value&& ...value)
 {
     std::ostringstream os;
     ((os << std::forward<Value>(value)), ...);
-    const std::string& message = os.str();
+    std::string message = std::move(os).str();
     log(level, message);
 }
 
