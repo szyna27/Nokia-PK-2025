@@ -20,6 +20,9 @@ jobs:
     - name: Install p7zip
       run: sudo apt-get update && sudo apt-get install -y p7zip-full
 
+    - name: Remove existing Qt directory
+      run: rm -rf /home/runner/work/Nokia-PK-2025/Qt
+
     - name: Install Qt
       uses: jurplel/install-qt-action@v2
 
