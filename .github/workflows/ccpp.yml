@@ -8,7 +8,6 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -17,15 +16,21 @@ jobs:
         
     steps:
     - uses: actions/checkout@v2
+
+    - name: Install p7zip
+      run: sudo apt-get update && sudo apt-get install -y p7zip-full
+
     - name: Install Qt
       uses: jurplel/install-qt-action@v2
+
     - name: cmake
       run: cmake .
+
     - name: make all targets
       run: make all
 
     - name: UT for BtsApplication
-      run: make BtsApplicationUT 
+      run: make BtsApplicationUT
 
     - name: run BTS ut
       run: ./BTS/Tests/Application/BtsApplicationUT
@@ -38,4 +43,3 @@ jobs:
 
     - name: Next Steps
       run: echo "Add your next steps here"
-
