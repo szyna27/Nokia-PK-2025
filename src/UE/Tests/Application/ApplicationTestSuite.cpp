@@ -25,10 +25,10 @@ protected:
     StrictMock<ITimerPortMock> timerPortMock;
 
     Application objectUnderTest{PHONE_NUMBER,
-                                loggerMock,
-                                btsPortMock,
-                                userPortMock,
-                                timerPortMock};
+        loggerMock,
+        btsPortMock,
+        userPortMock,
+        timerPortMock};  
 };
 
 struct ApplicationNotConnectedTestSuite : ApplicationTestSuite
@@ -39,7 +39,7 @@ struct ApplicationNotConnectedTestSuite : ApplicationTestSuite
         EXPECT_CALL(timerPortMock, startTimer(500ms));
         EXPECT_CALL(userPortMock, showConnecting());
 
-        objectUnderTest.handleSib(BTS_ID);
+        objectUnderTest.handleSib(BTS_ID);   
     }
 };
 
@@ -58,8 +58,26 @@ struct ApplicationConnectingTestSuite : ApplicationNotConnectedTestSuite
 
 TEST_F(ApplicationConnectingTestSuite, shallHandleAttachAccept)
 {
+    EXPECT_CALL(timerPortMock, stopTimer());
     EXPECT_CALL(userPortMock, showConnected());
+
     objectUnderTest.handleAttachAccept();
+}
+
+TEST_F(ApplicationConnectingTestSuite, shallHandleAttachReject)
+{
+    EXPECT_CALL(timerPortMock, stopTimer());
+    EXPECT_CALL(userPortMock, showNotConnected());
+
+    objectUnderTest.handleAttachReject();
+}
+
+TEST_F(ApplicationConnectingTestSuite, shallHandleTimeout)
+{
+    EXPECT_CALL(timerPortMock, stopTimer());
+    EXPECT_CALL(userPortMock, showNotConnected());
+    
+    objectUnderTest.handleTimeout();
 }
 
 }
