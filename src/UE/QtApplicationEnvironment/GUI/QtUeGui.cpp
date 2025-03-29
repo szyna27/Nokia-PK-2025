@@ -159,6 +159,22 @@ void QtUeGui::onAcceptClicked()
     }
 }
 
+void QtUeGui::onViewSmsModeClicked()
+{
+    if(viewSmsModeCallback)
+    {
+        viewSmsModeCallback();
+    }
+}
+
+void QtUeGui::onComposeSmsModeClicked()
+{
+    if(composeSmsModeCallback)
+    {
+        composeSmsModeCallback();
+    }
+}
+
 void QtUeGui::onRejectClicked()
 {
     if(rejectCallback)
@@ -177,7 +193,14 @@ void QtUeGui::onHomeClicked()
 
 void QtUeGui::onItemSelected()
 {
-    onAcceptClicked();
+    auto index = listViewMode.getCurrentItemIndex();
+    if(index.first){
+        if(index.second == 0){
+            onComposeSmsModeClicked();
+        } else {
+            onViewSmsModeClicked();
+        }
+    }
 }
 
 void QtUeGui::onTextEntered()
@@ -193,6 +216,16 @@ void QtUeGui::setCloseGuard(CloseGuard closeGuard)
 void QtUeGui::setAcceptCallback(Callback callback)
 {
     acceptCallback = callback;
+}
+
+void QtUeGui::setViewSmsModeCallback(Callback callback)
+{
+    viewSmsModeCallback = callback;
+}
+
+void QtUeGui::setComposeSmsModeCallback(Callback callback)
+{
+    composeSmsModeCallback = callback;
 }
 
 void QtUeGui::setRejectCallback(Callback callback)

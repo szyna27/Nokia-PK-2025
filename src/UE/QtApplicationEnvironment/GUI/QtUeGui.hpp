@@ -43,6 +43,8 @@ public:
     void setCloseGuard(CloseGuard closeGuard) override;
     void setAcceptCallback(Callback) override;
     void setRejectCallback(Callback) override;
+    void setViewSmsModeCallback(Callback) override;
+    void setComposeSmsModeCallback(Callback) override;
 
     void setTitle(const std::string& title) override;
     void showConnected() override;
@@ -74,6 +76,8 @@ private:
     IUeGui::Callback acceptCallback;
     IUeGui::Callback rejectCallback;
     IUeGui::Callback homeCallback;
+    IUeGui::Callback viewSmsModeCallback;
+    IUeGui::Callback composeSmsModeCallback;
 
     void initGUI();
     void initInternalSignals();
@@ -118,6 +122,8 @@ private slots:
     void onAcceptClicked();
     void onRejectClicked();
     void onHomeClicked();
+    void onViewSmsModeClicked();
+    void onComposeSmsModeClicked();
     void onItemSelected();
     void onTextEntered();
     void setConnectedStateSlot(QString text, bool connected);
