@@ -83,11 +83,11 @@ struct ApplicationConnectedTestSuite : ApplicationConnectingTestSuite
     }
 };
 
+
 TEST_F(ApplicationNotConnectedTestSuite, shallHandleSibMessage)
 {
     shallHandleSibMessage();
 }
-
 
 TEST_F(ApplicationConnectingTestSuite, shallHandleAttachAccept)
 {

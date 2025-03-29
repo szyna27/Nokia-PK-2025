@@ -22,14 +22,14 @@ void ConnectingState::handleAttachReject()
 {
     context.timer.stopTimer();
 
-    context.setState<NotConnectedState>(false);
+    context.setState<NotConnectedState>();
 }
 
 void ConnectingState::handleTimeout()
 {
     context.timer.stopTimer();
 
-    context.setState<NotConnectedState>(false);
+    context.setState<NotConnectedState>();
 }
 
 } // namespace ue
