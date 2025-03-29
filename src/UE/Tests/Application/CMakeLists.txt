@@ -12,6 +12,7 @@ target_link_libraries(${PROJECT_NAME} UeApplication)
 target_link_libraries(${PROJECT_NAME} CommonUtMocks)
 target_link_gtest()
 
+add_test(NAME UeApplicationUT COMMAND ${PROJECT_NAME})
 
 
 
