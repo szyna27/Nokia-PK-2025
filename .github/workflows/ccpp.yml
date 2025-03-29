@@ -8,38 +8,36 @@ on:
 
 jobs:
   build:
-    runs-on: debian-latest
+    runs-on: ubuntu-latest
     defaults:
       run:
         shell: bash
         working-directory: src
         
     steps:
-    - uses: actions/checkout@v2
+    - name: Checkout repository
+      uses: actions/checkout@v4
 
     - name: Install p7zip
-      run: sudo apt-get update && sudo apt-get install -y p7zip-full
+      run: |
+        set -e
+        sudo apt-get update
+        sudo apt-get install -y p7zip-full
 
     - name: Install Qt
-      uses: jurplel/install-qt-action@v2
+      uses: jurplel/install-qt-action@v3
 
-    - name: cmake
-      run: cmake .
+    - name: Configure CMake
+      run: |
+        set -e
+        cmake .
 
-    - name: make all targets
-      run: make all
+    - name: Build all targets
+      run: |
+        set -e
+        make all
 
-    - name: UT for BtsApplication
-      run: make BtsApplicationUT
-
-    - name: run BTS ut
-      run: ./BTS/Tests/Application/BtsApplicationUT
-
-    - name: UT for COMMON
-      run: make COMMON_UT
-
-    - name: UT for UeApplication
-      run: make UeApplicationUT
-
-    - name: Next Steps
-      run: echo "Add your next steps here"
+    - name: Run unit tests with CTest
+      run: |
+        set -e
+        ctest --output-on-failure
