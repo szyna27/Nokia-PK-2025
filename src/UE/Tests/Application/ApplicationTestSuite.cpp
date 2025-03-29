@@ -43,41 +43,65 @@ struct ApplicationNotConnectedTestSuite : ApplicationTestSuite
     }
 };
 
-TEST_F(ApplicationNotConnectedTestSuite, shallHandleSibMessage)
-{
-    shallHandleSibMessage();
-}
-
 struct ApplicationConnectingTestSuite : ApplicationNotConnectedTestSuite
 {
     ApplicationConnectingTestSuite()
     {
         shallHandleSibMessage();
     }
+
+    void shallHandleAttachAccept()
+    {
+        EXPECT_CALL(timerPortMock, stopTimer());
+        EXPECT_CALL(userPortMock, showConnected());
+
+        objectUnderTest.handleAttachAccept();
+    }
+
+    void shallHandleAttachReject()
+    {
+        EXPECT_CALL(timerPortMock, stopTimer());
+        EXPECT_CALL(userPortMock, showNotConnected());
+
+        objectUnderTest.handleAttachReject();
+    }
+
+    void shallHandleTimeout()
+    {
+        EXPECT_CALL(timerPortMock, stopTimer());
+        EXPECT_CALL(userPortMock, showNotConnected());
+
+        objectUnderTest.handleTimeout();
+    }
 };
+
+struct ApplicationConnectedTestSuite : ApplicationConnectingTestSuite
+{
+    ApplicationConnectedTestSuite()
+    {
+        shallHandleAttachAccept();
+    }
+};
+
+TEST_F(ApplicationNotConnectedTestSuite, shallHandleSibMessage)
+{
+    shallHandleSibMessage();
+}
+
 
 TEST_F(ApplicationConnectingTestSuite, shallHandleAttachAccept)
 {
-    EXPECT_CALL(timerPortMock, stopTimer());
-    EXPECT_CALL(userPortMock, showConnected());
-
-    objectUnderTest.handleAttachAccept();
+    shallHandleAttachAccept();
 }
 
 TEST_F(ApplicationConnectingTestSuite, shallHandleAttachReject)
 {
-    EXPECT_CALL(timerPortMock, stopTimer());
-    EXPECT_CALL(userPortMock, showNotConnected());
-
-    objectUnderTest.handleAttachReject();
+    shallHandleAttachReject();
 }
 
 TEST_F(ApplicationConnectingTestSuite, shallHandleTimeout)
 {
-    EXPECT_CALL(timerPortMock, stopTimer());
-    EXPECT_CALL(userPortMock, showNotConnected());
-    
-    objectUnderTest.handleTimeout();
+    shallHandleTimeout();
 }
 
 }
