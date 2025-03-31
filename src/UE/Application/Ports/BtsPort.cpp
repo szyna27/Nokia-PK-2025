@@ -14,6 +14,7 @@ BtsPort::BtsPort(common::ILogger &logger, common::ITransport &transport, common:
 void BtsPort::start(IBtsEventsHandler &handler)
 {
     transport.registerMessageCallback([this](BinaryMessage msg) {handleMessage(msg);});
+    transport.registerDisconnectedCallback([this]() {handleDisconnect();});
     this->handler = &handler;
 }
 
@@ -21,6 +22,12 @@ void BtsPort::stop()
 {
     transport.registerMessageCallback(nullptr);
     handler = nullptr;
+}
+
+void BtsPort::handleDisconnect()
+{
+    if (handler)
+        handler->handleDisconnect();
 }
 
 void BtsPort::handleMessage(BinaryMessage msg)
