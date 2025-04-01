@@ -21,6 +21,7 @@ void BtsPort::start(IBtsEventsHandler &handler)
 void BtsPort::stop()
 {
     transport.registerMessageCallback(nullptr);
+    transport.registerDisconnectedCallback(nullptr);
     handler = nullptr;
 }
 
