@@ -48,11 +48,11 @@ struct ApplicationConnectingTestSuite : ApplicationNotConnectedTestSuite
     ApplicationConnectingTestSuite()
     {
         shallHandleSibMessage();
+        EXPECT_CALL(timerPortMock, stopTimer());
     }
 
     void shallHandleAttachAccept()
     {
-        EXPECT_CALL(timerPortMock, stopTimer());
         EXPECT_CALL(userPortMock, showConnected());
 
         objectUnderTest.handleAttachAccept();
@@ -60,7 +60,6 @@ struct ApplicationConnectingTestSuite : ApplicationNotConnectedTestSuite
 
     void shallHandleAttachReject()
     {
-        EXPECT_CALL(timerPortMock, stopTimer());
         EXPECT_CALL(userPortMock, showNotConnected());
 
         objectUnderTest.handleAttachReject();
@@ -68,10 +67,24 @@ struct ApplicationConnectingTestSuite : ApplicationNotConnectedTestSuite
 
     void shallHandleTimeout()
     {
-        EXPECT_CALL(timerPortMock, stopTimer());
         EXPECT_CALL(userPortMock, showNotConnected());
 
         objectUnderTest.handleTimeout();
+    }
+
+    void shallHandleDisconnect()
+    {
+        EXPECT_CALL(userPortMock, showNotConnected());
+
+        objectUnderTest.handleDisconnect();
+    }
+
+    void shallHandleReconnect()
+    {
+        shallHandleDisconnect();
+        shallHandleSibMessage();
+        EXPECT_CALL(timerPortMock, stopTimer());
+        shallHandleAttachAccept();
     }
 };
 
@@ -102,6 +115,26 @@ TEST_F(ApplicationConnectingTestSuite, shallHandleAttachReject)
 TEST_F(ApplicationConnectingTestSuite, shallHandleTimeout)
 {
     shallHandleTimeout();
+}
+
+TEST_F(ApplicationConnectingTestSuite, shallHandleDisconnectFromConnecting)
+{
+    shallHandleDisconnect();
+}
+
+TEST_F(ApplicationConnectingTestSuite, shallHandleReconnectFromConnecting)
+{
+    shallHandleReconnect();
+}
+
+TEST_F(ApplicationConnectedTestSuite, shallHandleDeisconnectFromConnected)
+{
+    shallHandleDisconnect();
+}
+
+TEST_F(ApplicationConnectedTestSuite, shallHandleReconnectFromConnected)
+{
+    shallHandleReconnect();
 }
 
 }
