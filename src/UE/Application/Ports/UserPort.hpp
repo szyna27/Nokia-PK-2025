@@ -19,6 +19,10 @@ public:
     void showConnecting() override;
     void showConnected() override;
 
+    
+
+    void showAlert(const std::string &header, const std::string &msg) override;
+
 private:
     common::PrefixedLogger logger;
     IUeGui& gui;
