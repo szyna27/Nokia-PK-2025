@@ -81,4 +81,13 @@ void BtsPort::sendAttachRequest(common::BtsId btsId)
 
 }
 
+void BtsPort::sendCallRequest(common::PhoneNumber receiver)
+{
+    logger.logDebug("sendCallRequest from: ", phoneNumber, " to: ", receiver);
+    common::OutgoingMessage msg{common::MessageId::CallRequest,
+                                phoneNumber,
+                                receiver};
+    transport.sendMessage(msg.getMessage());
+}
+
 }

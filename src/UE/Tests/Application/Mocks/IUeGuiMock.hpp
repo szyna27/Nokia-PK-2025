@@ -19,8 +19,8 @@ struct IUeGuiMock : public IUeGui
     MOCK_METHOD(void, setCloseGuard, (CloseGuard closeGuard), (final));
     MOCK_METHOD(void, setAcceptCallback, (Callback), (final));
     MOCK_METHOD(void, setRejectCallback, (Callback), (final));
-    MOCK_METHOD(void, setViewSmsModeCallback, (Callback), (final));
-    MOCK_METHOD(void, setComposeSmsModeCallback, (Callback), (final));
+    MOCK_METHOD(void, setHomeCallback, (Callback), (final));
+    MOCK_METHOD(void, setItemSelectedCallback, (Callback), (final));
     MOCK_METHOD(void, setTitle, (const std::string &title), (final));
     MOCK_METHOD(void, showConnected, (), (final));
     MOCK_METHOD(void, showConnecting, (), (final));

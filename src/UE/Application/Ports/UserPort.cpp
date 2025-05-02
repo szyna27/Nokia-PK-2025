@@ -1,5 +1,4 @@
 #include "UserPort.hpp"
-#include "UeGui/IListViewMode.hpp"
 #include <functional>
 
 namespace ue
@@ -38,8 +37,46 @@ void UserPort::showConnected()
     menu.clearSelectionList();
     menu.addSelectionListItem("Compose SMS", "");
     menu.addSelectionListItem("View SMS", "");
-    gui.setComposeSmsModeCallback([this] { gui.setSmsComposeMode(); });
-    gui.setViewSmsModeCallback([this] { gui.setViewTextMode(); });
+    menu.addSelectionListItem("Dial", "");
+}
+
+void UserPort::setAcceptCallback(IUeGui::Callback callback)
+{
+    gui.setAcceptCallback(callback);
+}
+
+void UserPort::setRejectCallback(IUeGui::Callback callback)
+{
+    gui.setRejectCallback(callback);
+}
+
+void UserPort::setHomeCallback(IUeGui::Callback callback)
+{
+    gui.setHomeCallback(callback);
+}
+
+void UserPort::setItemSelectedCallback(IUeGui::Callback callback)
+{
+    gui.setItemSelectedCallback(callback);
+}
+
+void UserPort::switchMode(IUeGui::IListViewMode &menu)
+{
+    auto indexPair = menu.getCurrentItemIndex();
+
+    if (indexPair.first)
+    {
+        currentMode = indexPair.second;
+    }
+    else
+    {
+        currentMode = NONE;
+    }
+}
+
+int UserPort::getCurrentMode()
+{
+    return currentMode;
 }
 
 }

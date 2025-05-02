@@ -19,8 +19,14 @@ public:
     void showConnecting() override;
     void showConnected() override;
 
+    void setAcceptCallback(IUeGui::Callback callback) override;
+    void setRejectCallback(IUeGui::Callback callback) override;
+    void setHomeCallback(IUeGui::Callback callback) override;
+    void setItemSelectedCallback(IUeGui::Callback callback) override;
+
 private:
     common::PrefixedLogger logger;
+    IUeGui::Callback callback;
     IUeGui& gui;
     common::PhoneNumber phoneNumber;
     IUserEventsHandler* handler = nullptr;

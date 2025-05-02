@@ -23,6 +23,12 @@ public:
     MOCK_METHOD(void, showNotConnected, (), (final));
     MOCK_METHOD(void, showConnecting, (), (final));
     MOCK_METHOD(void, showConnected, (), (final));
+
+    MOCK_METHOD(void, setAcceptCallback, (IUeGui::Callback), (final));
+    MOCK_METHOD(void, setRejectCallback, (IUeGui::Callback), (final));
+    MOCK_METHOD(void, setHomeCallback, (IUeGui::Callback), (final));
+    MOCK_METHOD(void, setItemSelectedCallback, (IUeGui::Callback), (final));
+    MOCK_METHOD(int, getCurrentMode, (), (final));
 };
 
 }

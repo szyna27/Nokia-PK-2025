@@ -40,4 +40,19 @@ void BaseState::handleDisconnect()
     logger.logError("Uexpected: handleDisconnect");
 }
 
+void BaseState::handleCallMessage(common::MessageId msgId)
+{
+    logger.logError("Uexpected: handleCallMessage: ", msgId);
+}
+
+void BaseState::handleCallAccept(common::MessageId msgId)
+{
+    logger.logError("Uexpected: handleCallAccept: ", msgId);
+}
+
+void BaseState::handleCallDropped(common::MessageId msgId)
+{
+    logger.logError("Uexpected: handleCallDropped: ", msgId);
+}
+
 }
