@@ -4,8 +4,9 @@ namespace ue
 {
 
 DialState::DialState(Context &context)
-    : ConnectedState(context)
+    : BaseState(context, "DialState")
 {
+    context.user.showDial();
     logger.logDebug("Entering DialState");
 }
 

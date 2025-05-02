@@ -1,11 +1,11 @@
 #pragma once
 
-#include "ConnectedState.hpp"
+#include "BaseState.hpp"
 
 namespace ue
 {
 
-class DialState : public ConnectedState
+class DialState : public BaseState
 {
 public:
     DialState(Context& context);

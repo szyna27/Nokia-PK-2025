@@ -1,7 +1,7 @@
 #pragma once
 
 #include "BaseState.hpp"
-#include "IListViewMode.hpp"
+#include "UeGui/IListViewMode.hpp"
 
 namespace ue
 {

@@ -4,8 +4,9 @@ namespace ue
 {
 
 TalkingState::TalkingState(Context &context)
-    : ConnectedState(context)
+    : BaseState(context, "TalkingState")
 {
+    context.user.showTalking();
     logger.logDebug("Entering TalkingState");
 }
 

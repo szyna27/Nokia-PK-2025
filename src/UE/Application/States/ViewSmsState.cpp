@@ -4,8 +4,9 @@ namespace ue
 {
 
 ViewSmsState::ViewSmsState(Context &context)
-    : ConnectedState(context)
+    : BaseState(context, "ViewSmsState")
 {
+    context.user.showViewSms();
     logger.logDebug("Entering ViewSmsState");
 }
 

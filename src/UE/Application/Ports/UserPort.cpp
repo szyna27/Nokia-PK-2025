@@ -34,10 +34,31 @@ void UserPort::showConnecting()
 void UserPort::showConnected()
 {
     IUeGui::IListViewMode& menu = gui.setListViewMode();
+    menuObject = &menu;
     menu.clearSelectionList();
     menu.addSelectionListItem("Compose SMS", "");
     menu.addSelectionListItem("View SMS", "");
     menu.addSelectionListItem("Dial", "");
+}
+
+void UserPort::showComposeSms()
+{
+    IUeGui::ISmsComposeMode& smsComposeMode = gui.setSmsComposeMode();
+}
+
+void UserPort::showViewSms()
+{
+    IUeGui::ITextMode& viewSmsMode = gui.setViewTextMode();
+}
+
+void UserPort::showDial()
+{
+    IUeGui::IDialMode& dialMode = gui.setDialMode();
+}
+
+void UserPort::showTalking()
+{
+    IUeGui::ICallMode& callMode = gui.setCallMode();
 }
 
 void UserPort::setAcceptCallback(IUeGui::Callback callback)
@@ -60,23 +81,14 @@ void UserPort::setItemSelectedCallback(IUeGui::Callback callback)
     gui.setItemSelectedCallback(callback);
 }
 
-void UserPort::switchMode(IUeGui::IListViewMode &menu)
+IUeGui::IListViewMode &UserPort::getMenuObject()
 {
-    auto indexPair = menu.getCurrentItemIndex();
-
-    if (indexPair.first)
+    if (!menuObject)
     {
-        currentMode = indexPair.second;
+        menuObject = &gui.setListViewMode();
+        logger.logError("Menu object is not initialized");
     }
-    else
-    {
-        currentMode = NONE;
-    }
-}
-
-int UserPort::getCurrentMode()
-{
-    return currentMode;
+    return *menuObject;
 }
 
 }

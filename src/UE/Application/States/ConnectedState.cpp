@@ -1,4 +1,3 @@
-#include "Ports/UserPort.hpp"
 #include "ConnectedState.hpp"
 #include "NotConnectedState.hpp"
 #include "ComposeSmsState.hpp"
@@ -12,7 +11,8 @@ ConnectedState::ConnectedState(Context &context)
     : BaseState(context, "ConnectedState")
 {
     context.user.showConnected();
-    context.user.setItemSelectedCallback([this, &menu] { selectMode(); });
+    auto &menu = context.user.getMenuObject();
+    context.user.setItemSelectedCallback([this, &menu] { selectMode(menu); });
 }
 
 void ConnectedState::handleDisconnect()
@@ -34,6 +34,7 @@ void ConnectedState::selectMode(IUeGui::IListViewMode &menu)
     switch (mode)
     {
         case COMPOSE_SMS:
+            logger.logInfo("Compose SMS selected");
             context.setState<ComposeSmsState>();
             break;
         case VIEW_SMS:

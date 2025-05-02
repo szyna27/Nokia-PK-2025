@@ -1,14 +1,15 @@
 #pragma once
 
-#include "ConnectedState.hpp"
+#include "BaseState.hpp"
 
 namespace ue
 {
 
-class ComposeSmsState : public ConnectedState
+class ComposeSmsState : public BaseState
 {
 public:
     ComposeSmsState(Context& context);
+    void returnToConnectedState();
 
 };
 
