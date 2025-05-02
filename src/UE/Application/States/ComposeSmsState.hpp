@@ -10,6 +10,7 @@ class ComposeSmsState : public BaseState
 public:
     ComposeSmsState(Context& context);
     void returnToConnectedState();
+    void sendSMS();
 
 };
 

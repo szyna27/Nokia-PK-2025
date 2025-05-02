@@ -30,11 +30,6 @@ void Application::handleSib(common::BtsId btsId)
     context.state->handleSib(btsId);
 }
 
-void Application::handleSms(common::PhoneNumber from, std::string message)
-{
-    context.state->handleSms(from, message);
-}
-
 void Application::handleAttachAccept()
 {
     context.state->handleAttachAccept();

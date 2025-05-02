@@ -48,9 +48,4 @@ void ConnectedState::selectMode(IUeGui::IListViewMode &menu)
             break;
     }
 }
-
-void ConnectedState::handleSms(common::PhoneNumber from, std::string message)
-{
-    context.user.showSms(from, message);
-}
 }

@@ -51,7 +51,6 @@ public:
     void showConnecting() override;
     void showNotConnected() override;
     void showNewSms(bool present) override;
-    void sendSms(PhoneNumber from, std::string message) override;
     void showPeerUserNotAvailable(PhoneNumber peer) override;
 
 

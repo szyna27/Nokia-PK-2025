@@ -30,8 +30,7 @@ public:
     void setItemSelectedCallback(IUeGui::Callback callback) override;
     
     IUeGui::IListViewMode& getMenuObject() override;
-    void showComposeSMS() override;
-    void showSms(common::PhoneNumber from, std::string message);
+    IUeGui::ISmsComposeMode& getSmsComposeMode() override;
 
 private:
     common::PrefixedLogger logger;
@@ -39,6 +38,7 @@ private:
     common::PhoneNumber phoneNumber;
     IUserEventsHandler* handler = nullptr;
     IUeGui::IListViewMode* menuObject = nullptr;
+    IUeGui::ISmsComposeMode* smsComposeMode = nullptr;
 };
 
 }

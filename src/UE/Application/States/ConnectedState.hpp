@@ -22,7 +22,6 @@ public:
     ConnectedState(Context& context);
     void handleDisconnect() override;
     void selectMode(IUeGui::IListViewMode& menu);
-    void handleSms(common::PhoneNumber from, std::string message) override;
 };
 
 }

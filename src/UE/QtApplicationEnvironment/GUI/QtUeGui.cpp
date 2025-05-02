@@ -295,12 +295,12 @@ IUeGui::ITextMode& QtUeGui::setViewTextMode()
 {
     return activateMode(textViewMode);
 }
-void QtUeGui::sendSms(PhoneNumber from, std::string message)
-{
-    logger.logDebug("GUI: sendSms(", to_string(from), ", ", message, ")");
-    smsComposeMode.setSmsText(message);
-    smsComposeMode.activateForViewingSms();
-    emit setNewMessageSignal(true);
-}
+// void QtUeGui::sendSms(PhoneNumber from, std::string message)
+// {
+//     logger.logDebug("GUI: sendSms(", to_string(from), ", ", message, ")");
+//     smsComposeMode.setSmsText(message);
+//     smsComposeMode.activateForViewingSms();
+//     emit setNewMessageSignal(true);
+// }
 
 }

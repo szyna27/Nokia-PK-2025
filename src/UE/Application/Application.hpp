@@ -34,7 +34,6 @@ public:
     void handleCallMessage(common::MessageId msgId) override;
     void handleCallAccept(common::MessageId msgId) override;
     void handleCallDropped(common::MessageId msgId) override;
-    void handleSms(common::PhoneNumber from, std::string message);
 
 private:
     Context context;

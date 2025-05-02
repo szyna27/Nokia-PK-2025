@@ -1,9 +1,6 @@
 #include "UserPort.hpp"
-<<<<<<< HEAD
-=======
 #include "UeGui/IListViewMode.hpp"
 #include "UeGui/ISmsComposeMode.hpp"
->>>>>>> cb63441 (Before merge)
 #include <functional>
 
 namespace ue
@@ -43,7 +40,6 @@ void UserPort::showConnected()
     menu.clearSelectionList();
     menu.addSelectionListItem("Compose SMS", "");
     menu.addSelectionListItem("View SMS", "");
-<<<<<<< HEAD
     menu.addSelectionListItem("Dial", "");
 }
 
@@ -95,29 +91,27 @@ IUeGui::IListViewMode &UserPort::getMenuObject()
         logger.logError("Menu object is not initialized");
     }
     return *menuObject;
-=======
-    gui.setComposeSmsModeCallback([this] { gui.setSmsComposeMode(); });
-    gui.setAcceptCallback([this] { });
-    gui.setViewSmsModeCallback([this] { gui.setViewTextMode(); });
->>>>>>> cb63441 (Before merge)
 }
 
-void UserPort::showComposeSMS()
+IUeGui::ISmsComposeMode &UserPort::getSmsComposeMode()
 {
-    printf("UserPort::showComposeSMS\n");
-    IUeGui::ISmsComposeMode& smsComposeMode = gui.setSmsComposeMode();
-    gui.setAcceptCallback([this, &smsComposeMode] {
-        common::PhoneNumber to = smsComposeMode.getPhoneNumber();
-        std::string message = smsComposeMode.getSmsText();
-        gui.sendSms(to, message);
-    });
-    gui.setRejectCallback([this] { });
+    if(!smsComposeMode)
+    {
+        smsComposeMode = &gui.setSmsComposeMode();
+        logger.logError("SMS compose mode is not initialized");
+    }
+    return *smsComposeMode;
 }
 
-void UserPort::showSms(common::PhoneNumber from, std::string message)
-{
-    IUeGui::IListViewMode& menu = gui.setListViewMode();
-    menu.clearSelectionList();
-    menu.addSelectionListItem("From: " + to_string(from), message);
-}
+// void UserPort::showComposeSMS()
+// {
+//     printf("UserPort::showComposeSMS\n");
+//     IUeGui::ISmsComposeMode& smsComposeMode = gui.setSmsComposeMode();
+//     gui.setAcceptCallback([this, &smsComposeMode] {
+//         common::PhoneNumber to = smsComposeMode.getPhoneNumber();
+//         std::string message = smsComposeMode.getSmsText();
+//         gui.sendSms(to, message);
+//     });
+//     gui.setRejectCallback([this] { });
+// }
 }
