@@ -2,6 +2,7 @@
 
 #include "BaseState.hpp"
 #include "UeGui/IListViewMode.hpp"
+#include "Messages/PhoneNumber.hpp"
 
 namespace ue
 {
@@ -21,6 +22,7 @@ public:
     ConnectedState(Context& context);
     void handleDisconnect() override;
     void selectMode(IUeGui::IListViewMode& menu);
+    void handleSms(common::PhoneNumber from, std::string message) override;
 };
 
 }

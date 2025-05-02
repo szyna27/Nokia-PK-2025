@@ -91,4 +91,10 @@ IUeGui::IListViewMode &UserPort::getMenuObject()
     return *menuObject;
 }
 
+void UserPort::showSms(common::PhoneNumber from, std::string message)
+{
+    IUeGui::IListViewMode& menu = gui.setListViewMode();
+    menu.clearSelectionList();
+    menu.addSelectionListItem("From: " + to_string(from), message);
+}
 }

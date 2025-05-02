@@ -19,6 +19,7 @@ public:
     virtual void handleCallMessage(common::MessageId) = 0;
     virtual void handleCallAccept(common::MessageId) = 0;
     virtual void handleCallDropped(common::MessageId) = 0;
+    virtual void handleSms(common::PhoneNumber from, std::string message) = 0;
 };
 
 class IBtsPort

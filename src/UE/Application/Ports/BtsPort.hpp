@@ -17,10 +17,12 @@ public:
 
     void sendAttachRequest(common::BtsId) override;
     void sendCallRequest(common::PhoneNumber) override;
+    void sendSMS(common::PhoneNumber to, const std::string& message);
 
 private:
     void handleMessage(BinaryMessage msg);
     void handleDisconnect();
+    void handleSms(common::PhoneNumber from, std::string message);
 
     common::PrefixedLogger logger;
     common::ITransport& transport;

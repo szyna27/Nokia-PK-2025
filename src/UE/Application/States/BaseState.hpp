@@ -3,6 +3,7 @@
 #include "IEventsHandler.hpp"
 #include "Logger/PrefixedLogger.hpp"
 #include "Context.hpp"
+#include "Messages/PhoneNumber.hpp"
 
 namespace ue
 {
@@ -24,6 +25,7 @@ public:
     void handleCallMessage(common::MessageId msgId) override;
     void handleCallAccept(common::MessageId msgId) override;
     void handleCallDropped(common::MessageId msgId) override;
+    void handleSms(common::PhoneNumber from, std::string message);
 
 protected:
     Context& context;

@@ -1,4 +1,5 @@
 #pragma once
+#include "Messages/PhoneNumber.hpp"
 
 #include "IUeGui.hpp"
 
@@ -30,6 +31,7 @@ public:
     virtual void setItemSelectedCallback(IUeGui::Callback) = 0;
     
     virtual IUeGui::IListViewMode& getMenuObject() = 0;
+    virtual void showSms(common::PhoneNumber from, std::string message) = 0;
 };
 
 }

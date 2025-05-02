@@ -138,7 +138,6 @@ void QtUeGui::setButtonLayout(QPushButton &btn)
     btn.setMaximumSize(stdBtnSize);
     btn.setIconSize(stdBtnSize);
     btn.setStyleSheet( "background-color: rgba( 255, 255, 255, 0% );" );
-
 }
 
 void QtUeGui::initModes()
@@ -295,6 +294,13 @@ IUeGui::ITextMode& QtUeGui::setAlertMode()
 IUeGui::ITextMode& QtUeGui::setViewTextMode()
 {
     return activateMode(textViewMode);
+}
+void QtUeGui::sendSms(PhoneNumber from, std::string message)
+{
+    logger.logDebug("GUI: sendSms(", to_string(from), ", ", message, ")");
+    smsComposeMode.setSmsText(message);
+    smsComposeMode.activateForViewingSms();
+    emit setNewMessageSignal(true);
 }
 
 }

@@ -34,6 +34,7 @@ public:
     MOCK_METHOD(void, setItemSelectedCallback, (IUeGui::Callback), (final));
     
     MOCK_METHOD(IUeGui::IListViewMode&, getMenuObject, (), (final));
+    MOCK_METHOD(void, showSms, (), (final));
 };
 
 }
