@@ -21,6 +21,9 @@ public:
     void handleAttachAccept() override;
     void handleAttachReject() override;
     void handleDisconnect() override;
+    void handleCallMessage(common::MessageId msgId) override;
+    void handleCallAccept(common::MessageId msgId) override;
+    void handleCallDropped(common::MessageId msgId) override;
 
 protected:
     Context& context;

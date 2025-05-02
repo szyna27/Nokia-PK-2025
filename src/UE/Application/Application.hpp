@@ -1,7 +1,9 @@
 #pragma once
 
+#include "States/NotConnectedState.hpp"
 #include "Logger/PrefixedLogger.hpp"
 #include "Messages/PhoneNumber.hpp"
+#include "Messages/MessageId.hpp"
 #include "IEventsHandler.hpp"
 #include "Context.hpp"
 
@@ -29,6 +31,9 @@ public:
     void handleAttachAccept() override;
     void handleAttachReject() override;
     void handleDisconnect() override;
+    void handleCallMessage(common::MessageId msgId) override;
+    void handleCallAccept(common::MessageId msgId) override;
+    void handleCallDropped(common::MessageId msgId) override;
 
 private:
     Context context;
