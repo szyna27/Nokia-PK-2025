@@ -20,6 +20,7 @@ public:
     virtual void showNotConnected() = 0;
     virtual void showConnecting() = 0;
     virtual void showConnected() = 0;
+<<<<<<< HEAD
     virtual void showComposeSms() = 0;
     virtual void showViewSms() = 0;
     virtual void showDial() = 0;
@@ -31,6 +32,9 @@ public:
     virtual void setItemSelectedCallback(IUeGui::Callback) = 0;
     
     virtual IUeGui::IListViewMode& getMenuObject() = 0;
+=======
+    virtual void showComposeSMS() = 0;
+>>>>>>> cb63441 (Before merge)
     virtual void showSms(common::PhoneNumber from, std::string message) = 0;
 };
 

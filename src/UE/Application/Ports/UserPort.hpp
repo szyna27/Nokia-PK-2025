@@ -30,6 +30,7 @@ public:
     void setItemSelectedCallback(IUeGui::Callback callback) override;
     
     IUeGui::IListViewMode& getMenuObject() override;
+    void showComposeSMS() override;
     void showSms(common::PhoneNumber from, std::string message);
 
 private:
