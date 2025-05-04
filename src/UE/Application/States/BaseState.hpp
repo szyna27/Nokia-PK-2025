@@ -25,6 +25,7 @@ public:
     void handleCallMessage(common::MessageId msgId) override;
     void handleCallAccept(common::MessageId msgId) override;
     void handleCallDropped(common::MessageId msgId) override;
+    void handleSMS(common::PhoneNumber from, const std::string& message) override;
     void handleAccept();
 
 protected:

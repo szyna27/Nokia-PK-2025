@@ -26,6 +26,7 @@ public:
     MOCK_METHOD(void, showMainMenu, (), (final));
     MOCK_METHOD(void, showComposeSms, (), (final));
     MOCK_METHOD(void, showViewSms, (), (final));
+    MOCK_METHOD(void, showNewSms, (bool), (final));
     MOCK_METHOD(void, showDial, (), (final));
     MOCK_METHOD(void, showTalking, (), (final));
 

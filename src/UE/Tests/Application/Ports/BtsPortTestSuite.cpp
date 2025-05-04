@@ -106,4 +106,14 @@ TEST_F(BtsPortTestSuite, shallSendSMS)
     ASSERT_NO_THROW(reader.checkEndOfMessage());
 }
 
+TEST_F(BtsPortTestSuite, shallReceiveSMS)
+{
+    EXPECT_CALL(handlerMock, handleSMS(PHONE_NUMBER, "Hello"));
+    common::OutgoingMessage msg{common::MessageId::Sms,
+                                PHONE_NUMBER,
+                                PHONE_NUMBER};
+    msg.writeText("Hello");
+    messageCallback(msg.getMessage());
+}
+
 }

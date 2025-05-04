@@ -25,14 +25,15 @@ protected:
     StrictMock<IBtsPortMock> btsPortMock;
     StrictMock<IUserPortMock> userPortMock;
     StrictMock<ITimerPortMock> timerPortMock;
-
     StrictMock<IListViewModeMock> listViewModeMock;
+    SMSDB smsDB = SMSDB();
 
     Application objectUnderTest{PHONE_NUMBER,
         loggerMock,
         btsPortMock,
         userPortMock,
-        timerPortMock};  
+        timerPortMock,
+        smsDB};  
 };
 
 struct ApplicationNotConnectedTestSuite : ApplicationTestSuite

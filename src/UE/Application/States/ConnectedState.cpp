@@ -83,4 +83,10 @@ void ConnectedState::sendSMS()
     context.bts.sendSMS(phoneNumber, smsText);
 }
 
+void ConnectedState::handleSMS(PhoneNumber from, const std::string &message)
+{
+    logger.logInfo("Received SMS from: ", from, " message: ", message);
+    context.smsDB.addSMS(from, message);
+    context.user.showNewSms(true);
+}
 }

@@ -142,15 +142,9 @@ IUeGui::ICallMode &UserPort::getCallMode()
     return *callMode;
 }
 
-// void UserPort::showComposeSMS()
-// {
-//     printf("UserPort::showComposeSMS\n");
-//     IUeGui::ISmsComposeMode& smsComposeMode = gui.setSmsComposeMode();
-//     gui.setAcceptCallback([this, &smsComposeMode] {
-//         common::PhoneNumber to = smsComposeMode.getPhoneNumber();
-//         std::string message = smsComposeMode.getSmsText();
-//         gui.sendSms(to, message);
-//     });
-//     gui.setRejectCallback([this] { });
-// }
+void UserPort::showNewSms(bool present)
+{
+    gui.showNewSms(present);
+
+}
 }

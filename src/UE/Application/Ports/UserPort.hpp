@@ -21,6 +21,7 @@ public:
     void showMainMenu() override;
     void showComposeSms() override;
     void showViewSms() override;
+    void showNewSms(bool present) override;
     void showDial() override;
     void showTalking() override;
     

@@ -23,6 +23,7 @@ public:
     virtual void showMainMenu() = 0;
     virtual void showComposeSms() = 0;
     virtual void showViewSms() = 0;
+    virtual void showNewSms(bool present) = 0;
     virtual void showDial() = 0;
     virtual void showTalking() = 0;
 

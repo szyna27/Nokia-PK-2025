@@ -60,4 +60,9 @@ void BaseState::handleAccept()
     logger.logError("Unexpected: handleAccept");
 }
 
+void BaseState::handleSMS(common::PhoneNumber from, const std::string &message)
+{
+    logger.logError("Unexpected: handleSMS: ", from, " ", message);
+}
+
 }

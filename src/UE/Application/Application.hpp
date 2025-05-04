@@ -5,6 +5,7 @@
 #include "Messages/PhoneNumber.hpp"
 #include "Messages/MessageId.hpp"
 #include "IEventsHandler.hpp"
+#include "SMS/SMSDB.hpp"
 #include "Context.hpp"
 
 namespace ue
@@ -20,7 +21,8 @@ public:
                 ILogger& iLogger,
                 IBtsPort& bts,
                 IUserPort& user,
-                ITimerPort& timer);
+                ITimerPort& timer,
+                SMSDB& smsDB);
     ~Application();
 
     // ITimerEventsHandler interface
@@ -34,6 +36,7 @@ public:
     void handleCallMessage(common::MessageId msgId) override;
     void handleCallAccept(common::MessageId msgId) override;
     void handleCallDropped(common::MessageId msgId) override;
+    void handleSMS(common::PhoneNumber from, const std::string& message) override;
 
 private:
     Context context;
