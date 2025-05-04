@@ -1,8 +1,5 @@
 #include "ConnectedState.hpp"
 #include "NotConnectedState.hpp"
-#include "ComposeSmsState.hpp"
-#include "ViewSmsState.hpp"
-#include "DialState.hpp"
 
 namespace ue
 {
@@ -11,8 +8,7 @@ ConnectedState::ConnectedState(Context &context)
     : BaseState(context, "ConnectedState")
 {
     context.user.showConnected();
-    auto &menu = context.user.getMenuObject();
-    context.user.setItemSelectedCallback([this, &menu] { selectMode(menu); });
+    changeMode(MAIN_MENU);
 }
 
 void ConnectedState::handleDisconnect()
@@ -24,28 +20,67 @@ void ConnectedState::selectMode(IUeGui::IListViewMode &menu)
 {
     auto indexPair = menu.getCurrentItemIndex();
     auto exists = indexPair.first;
-    auto mode = indexPair.second;
+    unsigned int mode = indexPair.second;
     if (!exists)
     {
         logger.logError("No item selected");
         return;
     }
 
+    changeMode(mode);
+}
+
+void ConnectedState::changeMode(unsigned int mode)
+{
     switch (mode)
     {
         case COMPOSE_SMS:
-            logger.logInfo("Compose SMS selected");
-            context.setState<ComposeSmsState>();
+            logger.logInfo("Changing mode to compose SMS");
+            context.user.showComposeSms();
+
+            context.user.setAcceptCallback([this] { sendSMS(); });
+
             break;
+
         case VIEW_SMS:
-            context.setState<ViewSmsState>();    
+            logger.logInfo("Changing mode to view SMS");
+            context.user.showViewSms();
+
             break;
+
         case DIAL:
-            context.setState<DialState>();
+            logger.logInfo("Changing mode to dial");
+            context.user.showDial();
+
             break;
+
+        case MAIN_MENU:
+            {   // Zmienna menu musi być wewnątrz bloku, stąd klamry
+                logger.logInfo("Changing mode to main menu");
+                context.user.showMainMenu();
+
+                auto &menu = context.user.getListViewMode();
+                context.user.setItemSelectedCallback([this, &menu] { selectMode(menu); });
+                context.user.setHomeCallback([this] { changeMode(MAIN_MENU); });
+                context.user.setAcceptCallback([this] { nullptr; });
+                context.user.setRejectCallback([this] { nullptr; });
+
+                break;
+            }
+
         default:
             logger.logError("Unknown mode: ", mode);
             break;
     }
 }
+
+void ConnectedState::sendSMS()
+{
+    logger.logInfo("Sending SMS");
+    auto &smsComposeMenu = context.user.getSmsComposeMode();
+    PhoneNumber phoneNumber = smsComposeMenu.getPhoneNumber();
+    std::string smsText = smsComposeMenu.getSmsText();
+    context.bts.sendSMS(phoneNumber, smsText);
+}
+
 }

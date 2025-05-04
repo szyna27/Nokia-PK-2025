@@ -6,6 +6,7 @@
 #include "Mocks/IBtsPortMock.hpp"
 #include "Mocks/IUserPortMock.hpp"
 #include "Mocks/ITimerPortMock.hpp"
+#include "Mocks/IUeGuiMock.hpp"
 #include "Messages/PhoneNumber.hpp"
 #include <memory>
 
@@ -20,9 +21,12 @@ protected:
     const common::PhoneNumber PHONE_NUMBER{112};
     const common::BtsId BTS_ID{1024};
     NiceMock<common::ILoggerMock> loggerMock;
+
     StrictMock<IBtsPortMock> btsPortMock;
     StrictMock<IUserPortMock> userPortMock;
     StrictMock<ITimerPortMock> timerPortMock;
+
+    StrictMock<IListViewModeMock> listViewModeMock;
 
     Application objectUnderTest{PHONE_NUMBER,
         loggerMock,
@@ -54,6 +58,12 @@ struct ApplicationConnectingTestSuite : ApplicationNotConnectedTestSuite
     void shallHandleAttachAccept()
     {
         EXPECT_CALL(userPortMock, showConnected());
+        EXPECT_CALL(userPortMock, showMainMenu());
+        EXPECT_CALL(userPortMock, getListViewMode()).WillOnce(ReturnRef(listViewModeMock));
+        EXPECT_CALL(userPortMock, setItemSelectedCallback(_));
+        EXPECT_CALL(userPortMock, setHomeCallback(_));
+        EXPECT_CALL(userPortMock, setAcceptCallback(_));
+        EXPECT_CALL(userPortMock, setRejectCallback(_));
 
         objectUnderTest.handleAttachAccept();
     }
@@ -127,7 +137,7 @@ TEST_F(ApplicationConnectingTestSuite, shallHandleReconnectFromConnecting)
     shallHandleReconnect();
 }
 
-TEST_F(ApplicationConnectedTestSuite, shallHandleDeisconnectFromConnected)
+TEST_F(ApplicationConnectedTestSuite, shallHandleDisconnectFromConnected)
 {
     shallHandleDisconnect();
 }

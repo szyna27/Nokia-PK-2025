@@ -96,12 +96,13 @@ void BtsPort::sendCallRequest(common::PhoneNumber receiver)
     transport.sendMessage(msg.getMessage());
 }
 
-void BtsPort::sendSMS(common::PhoneNumber to, const std::string &message)
+void BtsPort::sendSMS(common::PhoneNumber receiver, const std::string &message)
 {
-    logger.logDebug("sendSMS: ", to, ", message: ", message);
+    logger.logDebug("sendSMS from : ", phoneNumber, " to: ", receiver, 
+        ",message: ", message);
     common::OutgoingMessage msg{common::MessageId::Sms,
                                 phoneNumber,
-                                to};
+                                receiver};
     msg.writeText(message);
     transport.sendMessage(msg.getMessage());
 }

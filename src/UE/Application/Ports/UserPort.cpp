@@ -35,32 +35,41 @@ void UserPort::showConnecting()
 
 void UserPort::showConnected()
 {
-    IUeGui::IListViewMode& menu = gui.setListViewMode();
-    menuObject = &menu;
-    menu.clearSelectionList();
-    menu.addSelectionListItem("Compose SMS", "");
-    menu.addSelectionListItem("View SMS", "");
-    menu.addSelectionListItem("Dial", "");
+    gui.showConnected();
+}
+
+void UserPort::showMainMenu()
+{
+    IUeGui::IListViewMode& listViewMode = gui.setListViewMode();
+    this->listViewMode = &listViewMode;
+    listViewMode.clearSelectionList();
+    listViewMode.addSelectionListItem("Compose SMS", "");
+    listViewMode.addSelectionListItem("View SMS", "");
+    listViewMode.addSelectionListItem("Dial", "");
 }
 
 void UserPort::showComposeSms()
 {
     IUeGui::ISmsComposeMode& smsComposeMode = gui.setSmsComposeMode();
+    this->smsComposeMode = &smsComposeMode;
 }
 
 void UserPort::showViewSms()
 {
     IUeGui::ITextMode& viewSmsMode = gui.setViewTextMode();
+    this->viewSmsMode = &viewSmsMode;
 }
 
 void UserPort::showDial()
 {
     IUeGui::IDialMode& dialMode = gui.setDialMode();
+    this->dialMode = &dialMode;
 }
 
 void UserPort::showTalking()
 {
     IUeGui::ICallMode& callMode = gui.setCallMode();
+    this->callMode = &callMode;
 }
 
 void UserPort::setAcceptCallback(IUeGui::Callback callback)
@@ -83,14 +92,14 @@ void UserPort::setItemSelectedCallback(IUeGui::Callback callback)
     gui.setItemSelectedCallback(callback);
 }
 
-IUeGui::IListViewMode &UserPort::getMenuObject()
+IUeGui::IListViewMode &UserPort::getListViewMode()
 {
-    if (!menuObject)
+    if (!listViewMode)
     {
-        menuObject = &gui.setListViewMode();
+        listViewMode = &gui.setListViewMode();
         logger.logError("Menu object is not initialized");
     }
-    return *menuObject;
+    return *listViewMode;
 }
 
 IUeGui::ISmsComposeMode &UserPort::getSmsComposeMode()
@@ -101,6 +110,36 @@ IUeGui::ISmsComposeMode &UserPort::getSmsComposeMode()
         logger.logError("SMS compose mode is not initialized");
     }
     return *smsComposeMode;
+}
+
+IUeGui::ITextMode &UserPort::getViewSmsMode()
+{
+    if (!viewSmsMode)
+    {
+        viewSmsMode = &gui.setViewTextMode();
+        logger.logError("View SMS mode is not initialized");
+    }
+    return *viewSmsMode;
+}
+
+IUeGui::IDialMode &UserPort::getDialMode()
+{
+    if (!dialMode)
+    {
+        dialMode = &gui.setDialMode();
+        logger.logError("Dial mode is not initialized");
+    }
+    return *dialMode;
+}
+
+IUeGui::ICallMode &UserPort::getCallMode()
+{
+    if (!callMode)
+    {
+        callMode = &gui.setCallMode();
+        logger.logError("Call mode is not initialized");
+    }
+    return *callMode;
 }
 
 // void UserPort::showComposeSMS()

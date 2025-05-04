@@ -4,7 +4,6 @@
 #include "Logger/PrefixedLogger.hpp"
 #include "IUeGui.hpp"
 #include "Messages/PhoneNumber.hpp"
-#include "UeGui/IListViewMode.hpp"
 
 namespace ue
 {
@@ -19,6 +18,7 @@ public:
     void showNotConnected() override;
     void showConnecting() override;
     void showConnected() override;
+    void showMainMenu() override;
     void showComposeSms() override;
     void showViewSms() override;
     void showDial() override;
@@ -29,16 +29,22 @@ public:
     void setHomeCallback(IUeGui::Callback callback) override;
     void setItemSelectedCallback(IUeGui::Callback callback) override;
     
-    IUeGui::IListViewMode& getMenuObject() override;
+    IUeGui::IListViewMode& getListViewMode() override;
     IUeGui::ISmsComposeMode& getSmsComposeMode() override;
+    IUeGui::ITextMode& getViewSmsMode() override;
+    IUeGui::IDialMode& getDialMode() override;
+    IUeGui::ICallMode& getCallMode() override;
 
 private:
     common::PrefixedLogger logger;
     IUeGui& gui;
     common::PhoneNumber phoneNumber;
     IUserEventsHandler* handler = nullptr;
-    IUeGui::IListViewMode* menuObject = nullptr;
+    IUeGui::IListViewMode* listViewMode = nullptr;
     IUeGui::ISmsComposeMode* smsComposeMode = nullptr;
+    IUeGui::ITextMode* viewSmsMode = nullptr;
+    IUeGui::IDialMode* dialMode = nullptr;
+    IUeGui::ICallMode* callMode = nullptr;
 };
 
 }
