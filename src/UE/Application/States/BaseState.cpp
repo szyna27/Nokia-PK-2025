@@ -65,4 +65,14 @@ void BaseState::handleSMS(common::PhoneNumber from, const std::string &message)
     logger.logError("Unexpected: handleSMS: ", from, " ", message);
 }
 
+void BaseState::handleUIAction(std::optional<std::size_t> selectedIndex)
+{
+    logger.logError("Unexpected: handleUIAction: ", selectedIndex.value_or(0));
 }
+
+void BaseState::handleUIBack()
+{
+    logger.logError("Unexpected: handleUIBack");
+}
+
+} // namespace ue

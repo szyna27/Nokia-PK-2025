@@ -2,6 +2,7 @@
 
 #include "Messages/PhoneNumber.hpp"
 #include "IUeGui.hpp"
+#include <optional>
 
 namespace ue
 {
@@ -10,6 +11,9 @@ class IUserEventsHandler
 {
 public:
     virtual ~IUserEventsHandler() = default;
+
+    virtual void handleUIAction(std::optional<std::size_t> selectedIndex) = 0;
+    virtual void handleUIBack() = 0;
 };
 
 class IUserPort
@@ -33,6 +37,7 @@ public:
     virtual void setItemSelectedCallback(IUeGui::Callback) = 0;
     
     virtual IUeGui::IListViewMode& getListViewMode() = 0;
+    
     virtual IUeGui::ISmsComposeMode& getSmsComposeMode() = 0;
     virtual IUeGui::ITextMode& getViewSmsMode() = 0;
     virtual IUeGui::IDialMode& getDialMode() = 0;

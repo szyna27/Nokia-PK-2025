@@ -27,6 +27,8 @@ public:
     void handleCallDropped(common::MessageId msgId) override;
     void handleSMS(common::PhoneNumber from, const std::string& message) override;
     void handleAccept();
+    void handleUIAction(std::optional<std::size_t> selectedIndex) override;
+    void handleUIBack() override;
 
 protected:
     Context& context;
