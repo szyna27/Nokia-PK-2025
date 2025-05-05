@@ -7,8 +7,9 @@ Application::Application(common::PhoneNumber phoneNumber,
                          common::ILogger &iLogger,
                          IBtsPort &bts,
                          IUserPort &user,
-                         ITimerPort &timer)
-    : context{iLogger, bts, user, timer},
+                         ITimerPort &timer,
+                         SMSDB &smsDB)
+    : context{iLogger, bts, user, timer, smsDB},
       logger(iLogger, "[APP] ")
 {
     logger.logInfo("Started");
@@ -59,6 +60,11 @@ void Application::handleCallAccept(common::MessageId msgId)
 void Application::handleCallDropped(common::MessageId msgId)
 {
     context.state->handleCallDropped(msgId);
+}
+
+void Application::handleSMS(common::PhoneNumber from, const std::string &message)
+{
+    context.state->handleSMS(from, message);
 }
 
 } // namespace ue

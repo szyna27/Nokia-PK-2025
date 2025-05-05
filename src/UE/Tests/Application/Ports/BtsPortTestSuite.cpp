@@ -94,4 +94,26 @@ TEST_F(BtsPortTestSuite, shallSendAttachRequest)
     ASSERT_NO_THROW(reader.checkEndOfMessage());
 }
 
+TEST_F(BtsPortTestSuite, shallSendSMS)
+{
+    common::BinaryMessage msg;
+    EXPECT_CALL(transportMock, sendMessage(_)).WillOnce([&msg](auto param) { msg = std::move(param); return true; });
+    objectUnderTest.sendSMS(PHONE_NUMBER, "Hello");
+    common::IncomingMessage reader(msg);
+    ASSERT_NO_THROW(EXPECT_EQ(common::MessageId::Sms, reader.readMessageId()) );
+    ASSERT_NO_THROW(EXPECT_EQ(PHONE_NUMBER, reader.readPhoneNumber()));
+    ASSERT_NO_THROW(EXPECT_EQ("pHello", reader.readRemainingText()));
+    ASSERT_NO_THROW(reader.checkEndOfMessage());
+}
+
+TEST_F(BtsPortTestSuite, shallReceiveSMS)
+{
+    EXPECT_CALL(handlerMock, handleSMS(PHONE_NUMBER, "Hello"));
+    common::OutgoingMessage msg{common::MessageId::Sms,
+                                PHONE_NUMBER,
+                                PHONE_NUMBER};
+    msg.writeText("Hello");
+    messageCallback(msg.getMessage());
+}
+
 }

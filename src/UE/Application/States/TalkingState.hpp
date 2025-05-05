@@ -8,5 +8,6 @@ class TalkingState : public BaseState
 {
 public:
     TalkingState(Context &context);
+    void returnToConnectedState();
 };
 }
