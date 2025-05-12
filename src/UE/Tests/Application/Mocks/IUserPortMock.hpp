@@ -40,6 +40,11 @@ public:
     MOCK_METHOD(IUeGui::ITextMode&, getViewSmsMode, (), (final));
     MOCK_METHOD(IUeGui::IDialMode&, getDialMode, (), (final));
     MOCK_METHOD(IUeGui::ICallMode&, getCallMode, (), (final));
+
+    // MOCK_METHOD(void, showCallRequest, (common::PhoneNumber), (final));
+    // MOCK_METHOD(void, showCallAccept, (common::PhoneNumber), (final));
+    // MOCK_METHOD(void, showCallDropped, (common::PhoneNumber), (final));
+    // MOCK_METHOD(void, showCallTalk, (common::PhoneNumber), (final));
 };
 
 }

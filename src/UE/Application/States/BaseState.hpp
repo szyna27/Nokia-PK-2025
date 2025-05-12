@@ -22,13 +22,12 @@ public:
     void handleAttachAccept() override;
     void handleAttachReject() override;
     void handleDisconnect() override;
-    void handleCallMessage(common::MessageId msgId) override;
-    void handleCallAccept(common::MessageId msgId) override;
-    void handleCallDropped(common::MessageId msgId) override;
+    void handleCallTalk(common::PhoneNumber) override;
+    void handleCallAccept(common::PhoneNumber) override;
+    void handleCallDropped(common::PhoneNumber) override;
     void handleSMS(common::PhoneNumber from, const std::string& message) override;
     void handleAccept();
-    void handleUIAction(std::optional<std::size_t> selectedIndex) override;
-    void handleUIBack() override;
+    void handleCallRequest(common::PhoneNumber from) override;
 
 protected:
     Context& context;

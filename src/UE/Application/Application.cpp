@@ -46,20 +46,20 @@ void Application::handleDisconnect()
     context.state->handleDisconnect(); 
 }
 
-void Application::handleCallMessage(common::MessageId msgId)
+void Application::handleCallTalk(common::PhoneNumber from)
 {
-    context.state->handleCallMessage(msgId);
+    context.state->handleCallTalk(from);
 }
 
-void Application::handleCallAccept(common::MessageId msgId)
+void Application::handleCallAccept(common::PhoneNumber from)
 {
-    context.state->handleCallAccept(msgId);
+    context.state->handleCallAccept(from);
 
 }
 
-void Application::handleCallDropped(common::MessageId msgId)
+void Application::handleCallDropped(common::PhoneNumber from)
 {
-    context.state->handleCallDropped(msgId);
+    context.state->handleCallDropped(from);
 }
 
 void Application::handleSMS(common::PhoneNumber from, const std::string &message)
@@ -67,6 +67,10 @@ void Application::handleSMS(common::PhoneNumber from, const std::string &message
     context.state->handleSMS(from, message);
 }
 
-} // namespace ue
+void Application::handleCallRequest(common::PhoneNumber from)
+{
+    context.state->handleCallRequest(from);
 
+}
+} // namespace ue
 

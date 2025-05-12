@@ -1,5 +1,6 @@
 #include "ConnectedState.hpp"
 #include "NotConnectedState.hpp"
+#include "TalkingState.hpp"
 
 namespace ue
 {
@@ -37,6 +38,7 @@ void ConnectedState::changeMode(unsigned int mode)
         case COMPOSE_SMS:
             logger.logInfo("Changing mode to compose SMS");
             context.user.showComposeSms();
+            logger.logInfo("Compose SMS mode");
 
             context.user.setAcceptCallback([this] { sendSMS(); });
 
@@ -51,7 +53,9 @@ void ConnectedState::changeMode(unsigned int mode)
         case DIAL:
             logger.logInfo("Changing mode to dial");
             context.user.showDial();
-
+            logger.logInfo("Dial mode");
+            
+            context.user.setAcceptCallback([this] { sendCallRequest(); });
             break;
 
         case MAIN_MENU:
@@ -89,4 +93,44 @@ void ConnectedState::handleSMS(PhoneNumber from, const std::string &message)
     context.smsDB.addSMS(from, message);
     context.user.showNewSms(true);
 }
+
+void ConnectedState::sendCallRequest()
+{
+    logger.logInfo("Sending call request");
+    auto &dialMenu = context.user.getDialMode();
+    PhoneNumber phoneNumber = dialMenu.getPhoneNumber();
+    context.bts.sendCallRequest(phoneNumber);
 }
+
+void ConnectedState::handleCallRequest(PhoneNumber from)
+{
+    logger.logInfo("Received call request from: ", from);
+    context.user.setAcceptCallback([this, from] { sendCallAccept(from); });
+    context.user.setRejectCallback([this, from] { sendCallDrop(from); });
+}
+
+void ConnectedState::sendCallAccept(PhoneNumber from)
+{
+    logger.logInfo("Sending call accept");
+    context.bts.sendCallAccept(from);
+    context.setState<TalkingState>(from);
+}
+
+void ConnectedState::sendCallDrop(PhoneNumber from)
+{
+    logger.logInfo("Sending call drop");
+    context.bts.sendCallDrop(from);
+}
+
+void ConnectedState::handleCallDropped(PhoneNumber from)
+{
+    logger.logInfo("Received call dropped from: ", from);
+    context.setState<ConnectedState>();
+}
+
+void ConnectedState::handleCallAccept(PhoneNumber from)
+{
+    logger.logInfo("Received call accept from: ", from);
+    context.setState<TalkingState>(from);
+}
+}// namespace ue

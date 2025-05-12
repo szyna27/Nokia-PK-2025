@@ -24,10 +24,20 @@ class ConnectedState : public BaseState
 {
 public:
     ConnectedState(Context& context);
+    void selectMode(IUeGui::IListViewMode& menu);
+
+    // handle events
     void handleDisconnect() override;
     void handleSMS(common::PhoneNumber from, const std::string& message) override;
-    void selectMode(IUeGui::IListViewMode& menu);
+    void handleCallRequest(common::PhoneNumber from) override;
+    void handleCallAccept(common::PhoneNumber from);
+    void handleCallDropped(common::PhoneNumber from);
+
+    // send events
     void sendSMS();
+    void sendCallRequest();
+    void sendCallAccept(common::PhoneNumber from);
+    void sendCallDrop(common::PhoneNumber from);
 
 private:
     void changeMode(unsigned int mode);

@@ -4,7 +4,7 @@
 namespace ue
 {
 
-TalkingState::TalkingState(Context &context)
+TalkingState::TalkingState(Context &context, PhoneNumber from)
     : BaseState(context, "TalkingState")
 {
     context.user.showTalking();
