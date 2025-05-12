@@ -33,10 +33,16 @@ public:
     void handleAttachAccept() override;
     void handleAttachReject() override;
     void handleDisconnect() override;
-    void handleCallMessage(common::MessageId msgId) override;
-    void handleCallAccept(common::MessageId msgId) override;
-    void handleCallDropped(common::MessageId msgId) override;
+
+    // Call events
+    void handleCallRequest(common::PhoneNumber from) override;
+    void handleCallTalk(common::PhoneNumber from) override;
+    void handleCallAccept(common::PhoneNumber from) override;
+    void handleCallDropped(common::PhoneNumber from) override;
+
+    // SMS events
     void handleSMS(common::PhoneNumber from, const std::string& message) override;
+    
 
 private:
     Context context;

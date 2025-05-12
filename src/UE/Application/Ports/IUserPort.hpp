@@ -37,6 +37,12 @@ public:
     virtual IUeGui::ITextMode& getViewSmsMode() = 0;
     virtual IUeGui::IDialMode& getDialMode() = 0;
     virtual IUeGui::ICallMode& getCallMode() = 0;
+
+    // Calling UI methods
+    // virtual void showCallRequest(common::PhoneNumber) = 0;
+    // virtual void showCallAccept(common::PhoneNumber) = 0;
+    // virtual void showCallDropped(common::PhoneNumber) = 0;
+    // virtual void showCallTalk(common::PhoneNumber) = 0;
 };
 
 }
