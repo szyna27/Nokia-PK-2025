@@ -7,7 +7,9 @@ namespace ue
 class TalkingState : public BaseState
 {
 public:
-    TalkingState(Context &context);
+    TalkingState(Context &context, common::PhoneNumber from);
     void returnToConnectedState();
+    void handleCallTalk(common::PhoneNumber from, const std::string& message);
+    void sendCallTalk();
 };
 }

@@ -36,16 +36,31 @@ public:
     IUeGui::IDialMode& getDialMode() override;
     IUeGui::ICallMode& getCallMode() override;
 
+    // Calling UI methods
+    // TODO: Consider Implement these methods
+    // void showCallRequest(common::PhoneNumber) override;
+    // void showCallAccept(common::PhoneNumber) override;
+    // void showCallDropped(common::PhoneNumber) override;
+    // void showCallTalk(common::PhoneNumber) override;
+
 private:
     common::PrefixedLogger logger;
     IUeGui& gui;
     common::PhoneNumber phoneNumber;
     IUserEventsHandler* handler = nullptr;
+
     IUeGui::IListViewMode* listViewMode = nullptr;
     IUeGui::ISmsComposeMode* smsComposeMode = nullptr;
     IUeGui::ITextMode* viewSmsMode = nullptr;
     IUeGui::IDialMode* dialMode = nullptr;
     IUeGui::ICallMode* callMode = nullptr;
+
+    // Callbacks for UI events
+    void handleDialClicked();
+    void handleAcceptDialClicked();
+    void handleRejectDialClicked();
+    void handleAcceptCallClicked();
+    void handleRejectCallClicked();
 };
 
 }

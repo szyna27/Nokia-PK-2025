@@ -40,19 +40,19 @@ void BaseState::handleDisconnect()
     logger.logError("Unexpected: handleDisconnect");
 }
 
-void BaseState::handleCallMessage(common::MessageId msgId)
+void BaseState::handleCallTalk(common::PhoneNumber from)
 {
-    logger.logError("Unexpected: handleCallMessage: ", msgId);
+    logger.logError("Unexpected: handleCallTalk: ", from);
 }
 
-void BaseState::handleCallAccept(common::MessageId msgId)
+void BaseState::handleCallAccept(common::PhoneNumber from)
 {
-    logger.logError("Unexpected: handleCallAccept: ", msgId);
+    logger.logError("Unexpected: handleCallAccept: ", from);
 }
 
-void BaseState::handleCallDropped(common::MessageId msgId)
+void BaseState::handleCallDropped(common::PhoneNumber from)
 {
-    logger.logError("Unexpected: handleCallDropped: ", msgId);
+    logger.logError("Unexpected: handleCallDropped: ", from);
 }
 
 void BaseState::handleAccept()
@@ -65,4 +65,9 @@ void BaseState::handleSMS(common::PhoneNumber from, const std::string &message)
     logger.logError("Unexpected: handleSMS: ", from, " ", message);
 }
 
+void BaseState::handleCallRequest(common::PhoneNumber from)
+{
+    logger.logError("Unexpected: handleCallRequest: ", from);
 }
+
+} // namespace ue
