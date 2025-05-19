@@ -45,8 +45,6 @@ public:
     virtual ICallMode& setCallMode() = 0;
     virtual ITextMode& setAlertMode() = 0;
     virtual ITextMode& setViewTextMode() = 0;
-
-    virtual ISmsViewMode& getSmsViewMode() = 0;
 };
 
 }

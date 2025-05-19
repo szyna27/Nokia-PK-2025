@@ -7,6 +7,8 @@
 #include "IEventsHandler.hpp"
 #include "SMS/SMSDB.hpp"
 #include "Context.hpp"
+#include "States/ViewSMSListState.hpp"
+
 
 namespace ue
 {
@@ -43,6 +45,8 @@ public:
     // SMS events
     void handleSMS(common::PhoneNumber from, const std::string& message) override;
     
+    void handleUIAction(std::optional<std::size_t> selectedIndex) override;
+    void handleUIBack() override;
 
 private:
     Context context;

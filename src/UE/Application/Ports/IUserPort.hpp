@@ -1,9 +1,8 @@
 #pragma once
-
 #include "Messages/PhoneNumber.hpp"
 #include "IUeGui.hpp"
 #include <optional>
-
+#include "SMS/SMSDB.hpp"
 namespace ue
 {
 
@@ -11,9 +10,6 @@ class IUserEventsHandler
 {
 public:
     virtual ~IUserEventsHandler() = default;
-
-    virtual void handleUIAction(std::optional<std::size_t> selectedIndex) = 0;
-    virtual void handleUIBack() = 0;
 };
 
 class IUserPort
@@ -26,8 +22,12 @@ public:
     virtual void showConnected() = 0;
     virtual void showMainMenu() = 0;
     virtual void showComposeSms() = 0;
-    virtual void showViewSms() = 0;
+
+    // SMS views
+    virtual void showViewSms(SMS sms) = 0;
     virtual void showNewSms(bool present) = 0;
+    virtual void showSmsList(const std::vector<ue::SMS>&) = 0;
+
     virtual void showDial() = 0;
     virtual void showTalking() = 0;
 
@@ -36,6 +36,8 @@ public:
     virtual void setHomeCallback(IUeGui::Callback) = 0;
     virtual void setItemSelectedCallback(IUeGui::Callback) = 0;
     
+    virtual IUeGui::IListViewMode& addSelection() = 0;
+    virtual IUeGui::IListViewMode& addSelectionListItem() = 0;
     virtual IUeGui::IListViewMode& getListViewMode() = 0;
     
     virtual IUeGui::ISmsComposeMode& getSmsComposeMode() = 0;
@@ -44,10 +46,10 @@ public:
     virtual IUeGui::ICallMode& getCallMode() = 0;
 
     // Calling UI methods
-    // virtual void showCallRequest(common::PhoneNumber) = 0;
-    // virtual void showCallAccept(common::PhoneNumber) = 0;
-    // virtual void showCallDropped(common::PhoneNumber) = 0;
-    // virtual void showCallTalk(common::PhoneNumber) = 0;
+    virtual void showCallRequest(common::PhoneNumber) = 0;
+    virtual void showCallAccept(common::PhoneNumber) = 0;
+    virtual void showCallDropped(common::PhoneNumber) = 0;
+    virtual void showCallTalk(common::PhoneNumber) = 0;
 };
 
 }

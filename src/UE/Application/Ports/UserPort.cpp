@@ -2,6 +2,7 @@
 #include "UeGui/IListViewMode.hpp"
 #include "UeGui/ISmsComposeMode.hpp"
 #include <functional>
+#include "SMS/SMSDB.hpp"
 
 namespace ue
 {
@@ -54,10 +55,27 @@ void UserPort::showComposeSms()
     this->smsComposeMode = &smsComposeMode;
 }
 
-void UserPort::showViewSms()
+void UserPort::showViewSms(SMS sms)
 {
     IUeGui::ITextMode& viewSmsMode = gui.setViewTextMode();
     this->viewSmsMode = &viewSmsMode;
+}
+
+void UserPort::showSmsList(const std::vector<SMS>& smsList)
+{
+    IUeGui::IListViewMode& listViewMode = gui.setListViewMode();
+    this->listViewMode = &listViewMode;
+    listViewMode.clearSelectionList();
+
+    for (const auto& sms : smsList)
+    {
+        std::string prefix = " ";
+        if (sms.isRead())
+        {
+            prefix = "* ";
+        }
+        listViewMode.addSelectionListItem(prefix + "From " + common::to_string(sms.getPhoneNumber()), sms.getText());
+    }
 }
 
 void UserPort::showDial()

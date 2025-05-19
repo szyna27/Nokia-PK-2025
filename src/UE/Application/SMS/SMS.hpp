@@ -11,7 +11,7 @@ namespace ue
             ~SMS() = default;
             common::PhoneNumber getPhoneNumber() const;
             std::string getText() const;
-            bool isRead();
+            bool isRead() const ;
             void setPhoneNumber(common::PhoneNumber phoneNumber);
             void setText(std::string text);
             void setRead(bool read);

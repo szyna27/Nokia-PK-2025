@@ -17,7 +17,7 @@ namespace ue
         return text;
     }
 
-    bool SMS::isRead() 
+    bool SMS::isRead() const 
     {
         return read;
     }
