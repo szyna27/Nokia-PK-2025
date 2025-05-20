@@ -5,6 +5,7 @@
 #include "NotConnectedState.hpp"
 #include "UeGui/ISmsViewMode.hpp"
 
+// TODO: Check state
 namespace ue
 {
 

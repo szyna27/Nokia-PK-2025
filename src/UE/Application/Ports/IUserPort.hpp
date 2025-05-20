@@ -36,20 +36,17 @@ public:
     virtual void setHomeCallback(IUeGui::Callback) = 0;
     virtual void setItemSelectedCallback(IUeGui::Callback) = 0;
     
-    virtual IUeGui::IListViewMode& addSelection() = 0;
-    virtual IUeGui::IListViewMode& addSelectionListItem() = 0;
     virtual IUeGui::IListViewMode& getListViewMode() = 0;
-    
     virtual IUeGui::ISmsComposeMode& getSmsComposeMode() = 0;
     virtual IUeGui::ITextMode& getViewSmsMode() = 0;
     virtual IUeGui::IDialMode& getDialMode() = 0;
     virtual IUeGui::ICallMode& getCallMode() = 0;
 
     // Calling UI methods
-    virtual void showCallRequest(common::PhoneNumber) = 0;
-    virtual void showCallAccept(common::PhoneNumber) = 0;
-    virtual void showCallDropped(common::PhoneNumber) = 0;
-    virtual void showCallTalk(common::PhoneNumber) = 0;
+    // virtual void showCallRequest(common::PhoneNumber) = 0;
+    // virtual void showCallAccept(common::PhoneNumber) = 0;
+    // virtual void showCallDropped(common::PhoneNumber) = 0;
+    // virtual void showCallTalk(common::PhoneNumber) = 0;
 };
 
 }

@@ -39,7 +39,6 @@ public:
     virtual void showPeerUserNotAvailable(PhoneNumber) = 0;
 
     virtual IListViewMode& setListViewMode() = 0;
-    virtual IListViewMode& addSelectionListItem() = 0;
     virtual ISmsComposeMode& setSmsComposeMode() = 0;
     virtual IDialMode& setDialMode() = 0;
     virtual ICallMode& setCallMode() = 0;
