@@ -47,8 +47,7 @@ void ConnectedState::changeMode(unsigned int mode)
 
         case VIEW_SMS:
             logger.logInfo("Changing mode to view SMS");
-            context.user.showSmsList(context.smsDB.getAllSMS());
-
+            context.setState<ViewSMSListState>();
             break;
 
         case DIAL:

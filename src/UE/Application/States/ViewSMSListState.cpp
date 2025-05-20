@@ -2,6 +2,7 @@
 #include "Context.hpp"
 #include "ViewSingleSmsState.hpp"
 #include "NotConnectedState.hpp"
+#include "ConnectedState.hpp"
 #include "UeGui/IListViewMode.hpp"
 #include <optional>
 
@@ -25,6 +26,7 @@ void ViewSMSListState::handleUIAction(std::optional<std::size_t> selectedIndex)
 void ViewSMSListState::handleUIBack()
 {
     context.user.showMainMenu();
+    context.setState<ConnectedState>();
 }
 
 void ViewSMSListState::handleDisconnect()
@@ -43,28 +45,38 @@ void ViewSMSListState::handleSMS(common::PhoneNumber from, const std::string &me
 void ViewSMSListState::showSMSList()
 {
     auto& listViewMode = context.user.getListViewMode();
+    listViewMode.clearSelectionList();
     
     auto allSms = context.smsDB.getAllSMS();
     
     if (allSms.empty()) {
-        context.user.getListViewMode().addSelectionListItem("No messages", "");
-        return;
-    }
-    
-    for (const auto& sms : allSms) {
-        std::string sender = "From: " + std::to_string(sms.getPhoneNumber().value);
-        std::string preview = sms.getText().substr(0, std::min(sms.getText().length(), size_t(20)));
-        if (sms.getText().length() > 20) {
-            preview += "...";
+        listViewMode.addSelectionListItem("No messages", "");
+    } else {
+        for (const auto& sms : allSms) {
+            std::string readStatus = sms.isRead() ? "✓ " : "● ";
+            std::string sender = readStatus + "From: " + std::to_string(sms.getPhoneNumber().value);
+            std::string preview = sms.getText().substr(0, std::min(sms.getText().length(), size_t(20)));
+            if (sms.getText().length() > 20) {
+                preview += "...";
+            }
+            
+            listViewMode.addSelectionListItem(sender, preview);
         }
-        
-        context.user.getListViewMode().addSelectionListItem(sender, preview);
     }
     
-    context.user.setHomeCallback([this]() { handleUIBack(); });
-    context.user.setItemSelectedCallback([this]() { handleUIAction(std::nullopt); });
+    // Set callbacks for navigation
+    context.user.setHomeCallback([this]() { 
+        context.user.showMainMenu();
+        context.setState<ConnectedState>();
+    });
     
-    context.user.showNewSms(false);
+    context.user.setItemSelectedCallback([this]() { 
+        auto indexPair = context.user.getListViewMode().getCurrentItemIndex();
+        if (indexPair.first) {
+            // If a valid selection exists (first == true)
+            handleUIAction(indexPair.second);
+        }
+    });
 }
 
 } // namespace ue

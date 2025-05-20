@@ -1,4 +1,5 @@
 #include "SMSDB.hpp"
+#include <stdexcept>
 
 namespace ue
 {
@@ -18,7 +19,7 @@ namespace ue
             }
         } 
     }
-    std::vector<SMS> SMSDB::getAllSMS() const
+    const std::vector<SMS>& SMSDB::getAllSMS() const
     {
         return smsList;
     }
@@ -29,6 +30,28 @@ namespace ue
             if (sms.getPhoneNumber() == phoneNumber && sms.getText() == text)
             {
                 return sms;
+            }
+        }
+        throw std::runtime_error("SMS not found");
+    }
+
+    SMS& SMSDB::getSmsAt(std::size_t index)
+    {
+        if (index >= smsList.size())
+        {
+            throw std::out_of_range("SMS index out of range");
+        }
+        return smsList[index];
+    }
+
+    void SMSDB::markSmsAsRead(common::PhoneNumber phoneNumber, const std::string &text)
+    {
+        for (auto& sms : smsList)
+        {
+            if (sms.getPhoneNumber() == phoneNumber && sms.getText() == text)
+            {
+                sms.setRead(true);
+                return;
             }
         }
         throw std::runtime_error("SMS not found");
