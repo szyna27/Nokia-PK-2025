@@ -8,36 +8,29 @@
 namespace ue
 {
 
-ViewSingleSmsState::ViewSingleSmsState(Context &context, std::size_t selectedIndex)
-    : BaseState(context, "ViewSingleSmsState"), selectedIndex(selectedIndex)
+ViewSingleSmsState::ViewSingleSmsState(Context &context, uint64_t smsId)
+    : BaseState(context, "ViewSingleSmsState"), smsId(smsId)
 {
     try {
-        // Get a const reference to all SMS messages
-        const auto& allSms = context.smsDB.getAllSMS();
+        // Get the SMS by ID
+        auto smsOpt = context.smsDB.getSmsById(smsId);
         
-        // Check if the selected index is valid
-        if (selectedIndex >= allSms.size()) {
-            throw std::out_of_range("SMS index out of range");
+        if (!smsOpt.has_value()) {
+            throw std::runtime_error("SMS with ID " + std::to_string(smsId) + " not found");
         }
         
-        // Get the selected SMS (only as a const reference, to read its data)
-        const auto& sms = allSms[selectedIndex];
+        // Store a copy of the SMS, not just a reference that might be invalidated
+        auto sms = smsOpt.value();
         
-        // Mark SMS as read using the proper phone number and text
-        context.smsDB.markSmsAsRead(sms.getPhoneNumber(), sms.getText());
+        // Mark the SMS as read - do this before refreshing the display
+        context.smsDB.markSmsAsReadById(smsId);
         
-        // Format the SMS message for display
-        std::string displayText = "From: " + std::to_string(sms.getPhoneNumber().value) + "\n\n" + sms.getText();
-        
-        // Show the message in the text view mode
-        auto& textMode = context.user.getViewSmsMode();
-        textMode.setText(displayText);
-        
+        // Setup callbacks first to avoid segfaults if refreshDisplay fails
         // Set up callbacks for navigation
-        context.user.setHomeCallback([this, &context]() {
+        context.user.setHomeCallback([this]() {
             // When home button is pressed, go to main menu
-            context.user.showMainMenu();
-            context.setState<ConnectedState>();
+            this->context.user.showMainMenu();
+            this->context.setState<ConnectedState>();
         });
         
         context.user.setRejectCallback([this]() {
@@ -45,10 +38,27 @@ ViewSingleSmsState::ViewSingleSmsState(Context &context, std::size_t selectedInd
             handleUIBack();
         });
         
+        // Set up accept callback for toggling read status
+        context.user.setAcceptCallback([this]() {
+            try {
+                // When accept is pressed, toggle read status
+                if (this->context.smsDB.toggleReadStatusById(this->smsId)) {
+                    // Refresh the display to show updated status
+                    this->refreshDisplay();
+                }
+            } catch (const std::exception& e) {
+                this->logger.logError("Error toggling SMS read status: ", e.what());
+                this->handleUIBack();
+            }
+        });
+        
+        // Display the SMS after all callbacks are set up
+        refreshDisplay();
+        
         logger.logInfo("Viewing SMS from: ", sms.getPhoneNumber(), ", marked as read");
     }
-    catch (const std::out_of_range& e) {
-        logger.logError("Invalid SMS index: ", selectedIndex);
+    catch (const std::exception& e) {
+        logger.logError("Error displaying SMS: ", e.what());
         context.setState<ViewSMSListState>();
     }
 }
@@ -74,6 +84,30 @@ void ViewSingleSmsState::handleSMS(common::PhoneNumber from, const std::string& 
     context.user.showNewSms(true);
     
     logger.logInfo("Received SMS in ViewSingleSmsState from: ", from, " message: ", message);
+}
+
+void ViewSingleSmsState::refreshDisplay()
+{
+    auto smsOpt = context.smsDB.getSmsById(smsId);
+    if (!smsOpt.has_value()) {
+        logger.logError("Failed to find SMS with ID: ", smsId);
+        // If SMS not found, go back to SMS list to avoid segfault
+        handleUIBack();
+        return;
+    }
+    
+    const auto& sms = smsOpt.value();
+    
+    // Format the SMS message for display with read status
+    std::string readStatus = sms.isRead() ? "[Read]" : "[NEW]";
+    std::string displayText = readStatus + "\nFrom: " + std::to_string(sms.getPhoneNumber().value) 
+                            + "\n\n" + sms.getText() 
+                            + "\n\n[Accept] to toggle read/unread status";
+    
+    // Get a reference to the text mode and set the text
+    // Store it in a local variable to ensure it's alive during the operation
+    auto& textMode = context.user.getViewSmsMode();
+    textMode.setText(displayText);
 }
 
 } // namespace ue

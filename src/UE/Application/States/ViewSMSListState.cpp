@@ -18,8 +18,16 @@ ViewSMSListState::ViewSMSListState(Context &context)
 void ViewSMSListState::handleUIAction(std::optional<std::size_t> selectedIndex)
 {
     if (selectedIndex.has_value()) {
-        auto selected = selectedIndex.value();
-        context.setState<ViewSingleSmsState>(selected);
+        auto uiIndex = selectedIndex.value();
+        
+        // Check if we have this UI index mapped to an SMS ID
+        if (indexToSmsIdMap.find(uiIndex) != indexToSmsIdMap.end()) {
+            // Get the SMS ID corresponding to the UI index
+            uint64_t smsId = indexToSmsIdMap[uiIndex];
+            context.setState<ViewSingleSmsState>(smsId);
+        } else {
+            logger.logError("Invalid UI index: ", uiIndex);
+        }
     }
 }
 
@@ -47,20 +55,28 @@ void ViewSMSListState::showSMSList()
     auto& listViewMode = context.user.getListViewMode();
     listViewMode.clearSelectionList();
     
-    auto allSms = context.smsDB.getAllSMS();
+    const auto& allSms = context.smsDB.getAllSMS();
+    
+    // Clear the previous mapping
+    indexToSmsIdMap.clear();
     
     if (allSms.empty()) {
         listViewMode.addSelectionListItem("No messages", "");
     } else {
+        size_t uiIndex = 0;
         for (const auto& sms : allSms) {
-            std::string readStatus = sms.isRead() ? "✓ " : "● ";
+            std::string readStatus = sms.isRead() ? "[Read] " : "[NEW] ";
             std::string sender = readStatus + "From: " + std::to_string(sms.getPhoneNumber().value);
             std::string preview = sms.getText().substr(0, std::min(sms.getText().length(), size_t(20)));
             if (sms.getText().length() > 20) {
                 preview += "...";
             }
             
+            // Store mapping between UI index and SMS ID
+            indexToSmsIdMap[uiIndex] = sms.getId();
+            
             listViewMode.addSelectionListItem(sender, preview);
+            uiIndex++;
         }
     }
     

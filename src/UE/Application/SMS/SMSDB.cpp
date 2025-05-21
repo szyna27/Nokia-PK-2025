@@ -56,4 +56,57 @@ namespace ue
         }
         throw std::runtime_error("SMS not found");
     }
+
+    std::optional<SMS> SMSDB::getSmsById(uint64_t id) const
+    {
+        // Add defensive check for empty list
+        if (smsList.empty()) {
+            return std::nullopt;
+        }
+        
+        for (const auto& sms : smsList)
+        {
+            if (sms.getId() == id)
+            {
+                return sms;
+            }
+        }
+        return std::nullopt;
+    }
+    
+    void SMSDB::markSmsAsReadById(uint64_t id)
+    {
+        // Check for empty list first
+        if (smsList.empty()) {
+            return;
+        }
+        
+        for (auto& sms : smsList)
+        {
+            if (sms.getId() == id)
+            {
+                sms.setRead(true);
+                return;
+            }
+        }
+    }
+    
+    bool SMSDB::toggleReadStatusById(uint64_t id)
+    {
+        // Check for empty list first
+        if (smsList.empty()) {
+            return false;
+        }
+        
+        for (auto& sms : smsList)
+        {
+            if (sms.getId() == id)
+            {
+                bool newStatus = !sms.isRead();
+                sms.setRead(newStatus);
+                return true;
+            }
+        }
+        return false;
+    }
 }

@@ -2,6 +2,8 @@
 #include "BaseState.hpp"
 #include <vector>
 #include <string>
+#include <map>
+#include <cstdint>
 #include "ViewSingleSmsState.hpp"
 
 namespace ue
@@ -17,6 +19,8 @@ namespace ue
 
         private:
             void showSMSList();
-            std::vector<std::string> smsList;
+            
+            // Map to associate UI index with SMS ID
+            std::map<std::size_t, uint64_t> indexToSmsIdMap;
     };
 } // namespace ue

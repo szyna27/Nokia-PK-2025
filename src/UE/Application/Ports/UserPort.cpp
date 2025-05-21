@@ -132,11 +132,8 @@ IUeGui::ISmsComposeMode &UserPort::getSmsComposeMode()
 
 IUeGui::ITextMode &UserPort::getViewSmsMode()
 {
-    if (!viewSmsMode)
-    {
-        viewSmsMode = &gui.setViewTextMode();
-        logger.logError("View SMS mode is not initialized");
-    }
+    // Always get a fresh reference to avoid any potential dangling pointers
+    viewSmsMode = &gui.setViewTextMode();
     return *viewSmsMode;
 }
 
