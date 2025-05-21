@@ -2,6 +2,8 @@
 #include "NotConnectedState.hpp"
 #include "TalkingState.hpp"
 
+using namespace std::chrono_literals;
+
 namespace ue
 {
 
@@ -56,6 +58,13 @@ void ConnectedState::changeMode(unsigned int mode)
             logger.logInfo("Dial mode");
             
             context.user.setAcceptCallback([this] { sendCallRequest(); });
+            context.user.setRejectCallback([this] { 
+                auto &dialMenu = context.user.getDialMode();
+                PhoneNumber phoneNumber = dialMenu.getPhoneNumber();
+                logger.logInfo("Dropping outgoing call request to: ", phoneNumber);
+                context.bts.sendCallDrop(phoneNumber);
+                changeMode(MAIN_MENU);
+             });
             break;
 
         case MAIN_MENU:
@@ -100,6 +109,7 @@ void ConnectedState::sendCallRequest()
     auto &dialMenu = context.user.getDialMode();
     PhoneNumber phoneNumber = dialMenu.getPhoneNumber();
     context.bts.sendCallRequest(phoneNumber);
+    context.timer.startTimer(60000ms);
 }
 
 void ConnectedState::handleCallRequest(PhoneNumber from)
@@ -111,6 +121,7 @@ void ConnectedState::handleCallRequest(PhoneNumber from)
 
 void ConnectedState::sendCallAccept(PhoneNumber from)
 {
+    context.timer.stopTimer();
     logger.logInfo("Sending call accept");
     context.bts.sendCallAccept(from);
     context.setState<TalkingState>(from);
@@ -118,19 +129,33 @@ void ConnectedState::sendCallAccept(PhoneNumber from)
 
 void ConnectedState::sendCallDrop(PhoneNumber from)
 {
+    context.timer.stopTimer();
     logger.logInfo("Sending call drop");
     context.bts.sendCallDrop(from);
 }
 
 void ConnectedState::handleCallDropped(PhoneNumber from)
 {
+    context.timer.stopTimer();
     logger.logInfo("Received call dropped from: ", from);
     context.setState<ConnectedState>();
 }
 
 void ConnectedState::handleCallAccept(PhoneNumber from)
 {
+    context.timer.stopTimer();
     logger.logInfo("Received call accept from: ", from);
     context.setState<TalkingState>(from);
 }
+
+void ConnectedState::handleTimeout()
+{
+    logger.logInfo("Received timeout");
+    auto &dialMenu = context.user.getDialMode();
+    PhoneNumber phoneNumber = dialMenu.getPhoneNumber();
+    logger.logInfo("Dropping outgoing call request to: ", phoneNumber);
+    context.bts.sendCallDrop(phoneNumber);
+    changeMode(MAIN_MENU);
+}
+
 }// namespace ue

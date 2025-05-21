@@ -32,6 +32,7 @@ public:
     void handleCallRequest(common::PhoneNumber from) override;
     void handleCallAccept(common::PhoneNumber from);
     void handleCallDropped(common::PhoneNumber from);
+    void handleTimeout() override;
 
     // send events
     void sendSMS();
