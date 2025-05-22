@@ -70,12 +70,13 @@ void BaseState::handleCallRequest(common::PhoneNumber from)
     logger.logError("Unexpected: handleCallRequest: ", from);
 }
 
-void BaseState::handleUIAction(std::optional<std::size_t> selectedIndex){
+void BaseState::handleUIAction(std::optional<std::size_t> selectedIndex)
+{
     logger.logError("Unexpected: handleUiAction(), index: ", (selectedIndex.has_value() ? std::to_string(selectedIndex.value()) : "none"));
 }
 
-void BaseState::handleUIBack(){
+void BaseState::handleUIBack()
+{
     logger.logError("Unexpected: handleUiBack()");
 }
-
 } // namespace ue

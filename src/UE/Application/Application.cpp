@@ -70,7 +70,6 @@ void Application::handleSMS(common::PhoneNumber from, const std::string &message
 void Application::handleCallRequest(common::PhoneNumber from)
 {
     context.state->handleCallRequest(from);
-
 }
 
 void Application::handleUIAction(std::optional<std::size_t> selectedIndex)
@@ -83,6 +82,5 @@ void Application::handleUIBack()
 {
     context.state->handleUIBack();
 }
-
 } // namespace ue
 

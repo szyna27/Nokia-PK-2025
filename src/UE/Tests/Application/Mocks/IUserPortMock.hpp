@@ -43,6 +43,7 @@ public:
 
     MOCK_METHOD(void, showSmsList, (const std::vector<SMS>&), (final));
 
+
     // MOCK_METHOD(void, showCallRequest, (common::PhoneNumber), (final));
     // MOCK_METHOD(void, showCallAccept, (common::PhoneNumber), (final));
     // MOCK_METHOD(void, showCallDropped, (common::PhoneNumber), (final));
