@@ -132,7 +132,6 @@ IUeGui::ISmsComposeMode &UserPort::getSmsComposeMode()
 
 IUeGui::ITextMode &UserPort::getViewSmsMode()
 {
-    // Always get a fresh reference to avoid any potential dangling pointers
     viewSmsMode = &gui.setViewTextMode();
     return *viewSmsMode;
 }

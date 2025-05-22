@@ -16,8 +16,6 @@ namespace ue
             void setPhoneNumber(common::PhoneNumber phoneNumber);
             void setText(std::string text);
             void setRead(bool read);
-            
-            // Unique ID methods
             uint64_t getId() const;
             
         private:
@@ -25,8 +23,6 @@ namespace ue
             std::string text;
             bool read = false;
             uint64_t id;
-            
-            // Static counter for generating unique IDs
             static uint64_t nextId;
     };
 }

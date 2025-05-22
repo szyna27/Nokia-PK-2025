@@ -22,7 +22,6 @@ void ViewSMSListState::handleUIAction(std::optional<std::size_t> selectedIndex)
         
         // Check if we have this UI index mapped to an SMS ID
         if (indexToSmsIdMap.find(uiIndex) != indexToSmsIdMap.end()) {
-            // Get the SMS ID corresponding to the UI index
             uint64_t smsId = indexToSmsIdMap[uiIndex];
             context.setState<ViewSingleSmsState>(smsId);
         } else {
@@ -80,7 +79,6 @@ void ViewSMSListState::showSMSList()
         }
     }
     
-    // Set callbacks for navigation
     context.user.setHomeCallback([this]() { 
         context.user.showMainMenu();
         context.setState<ConnectedState>();
@@ -89,7 +87,6 @@ void ViewSMSListState::showSMSList()
     context.user.setItemSelectedCallback([this]() { 
         auto indexPair = context.user.getListViewMode().getCurrentItemIndex();
         if (indexPair.first) {
-            // If a valid selection exists (first == true)
             handleUIAction(indexPair.second);
         }
     });
