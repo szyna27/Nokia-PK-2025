@@ -105,6 +105,7 @@ struct ApplicationConnectedTestSuite : ApplicationConnectingTestSuite
     {
         shallHandleAttachAccept();
     }
+
 };
 
 

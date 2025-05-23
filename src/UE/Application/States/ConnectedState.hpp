@@ -40,6 +40,8 @@ public:
     void sendCallAccept(common::PhoneNumber from);
     void sendCallDrop(common::PhoneNumber from);
 
+    void dropCall();
+
 private:
     void changeMode(unsigned int mode);
 
