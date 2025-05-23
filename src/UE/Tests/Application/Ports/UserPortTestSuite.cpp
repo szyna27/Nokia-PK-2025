@@ -76,7 +76,8 @@ TEST_F(UserPortTestSuite, shallShowComposeSms)
 TEST_F(UserPortTestSuite, shallShowViewSms)
 {
     EXPECT_CALL(guiMock, setViewTextMode()).WillOnce(ReturnRef(textModeMock));
-    objectUnderTest.showViewSms();
+    // Provide a dummy string as the SMS text to view
+    objectUnderTest.showViewSms(SMS(common::PhoneNumber{123}, "Test SMS"));
 }
 
 TEST_F(UserPortTestSuite, shallShowDial)

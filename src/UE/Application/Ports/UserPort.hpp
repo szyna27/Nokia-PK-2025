@@ -20,8 +20,12 @@ public:
     void showConnected() override;
     void showMainMenu() override;
     void showComposeSms() override;
-    void showViewSms() override;
+
+    // SMS views
+    void showViewSms(SMS sms) override;
     void showNewSms(bool present) override;
+    void showSmsList(const std::vector<SMS>& smsList) override;
+
     void showDial() override;
     void showTalking() override;
     

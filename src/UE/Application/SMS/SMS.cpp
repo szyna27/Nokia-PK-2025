@@ -2,8 +2,11 @@
 
 namespace ue
 {
+    // Initialize static counter
+    uint64_t SMS::nextId = 0;
+    
     SMS::SMS(common::PhoneNumber phoneNumber, std::string text)
-        : phoneNumber(phoneNumber), text(text)
+        : phoneNumber(phoneNumber), text(text), id(nextId++)
     {
     }
 
@@ -17,7 +20,12 @@ namespace ue
         return text;
     }
 
-    bool SMS::isRead() 
+    uint64_t SMS::getId() const
+    {
+        return id;
+    }
+
+    bool SMS::isRead() const 
     {
         return read;
     }

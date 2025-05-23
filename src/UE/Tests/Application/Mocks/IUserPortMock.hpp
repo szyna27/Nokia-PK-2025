@@ -25,7 +25,7 @@ public:
     MOCK_METHOD(void, showConnected, (), (final));
     MOCK_METHOD(void, showMainMenu, (), (final));
     MOCK_METHOD(void, showComposeSms, (), (final));
-    MOCK_METHOD(void, showViewSms, (), (final));
+    MOCK_METHOD(void, showViewSms, (SMS), (final));
     MOCK_METHOD(void, showNewSms, (bool), (final));
     MOCK_METHOD(void, showDial, (), (final));
     MOCK_METHOD(void, showTalking, (), (final));
@@ -40,6 +40,9 @@ public:
     MOCK_METHOD(IUeGui::ITextMode&, getViewSmsMode, (), (final));
     MOCK_METHOD(IUeGui::IDialMode&, getDialMode, (), (final));
     MOCK_METHOD(IUeGui::ICallMode&, getCallMode, (), (final));
+
+    MOCK_METHOD(void, showSmsList, (const std::vector<SMS>&), (final));
+
 
     // MOCK_METHOD(void, showCallRequest, (common::PhoneNumber), (final));
     // MOCK_METHOD(void, showCallAccept, (common::PhoneNumber), (final));
