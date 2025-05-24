@@ -158,6 +158,7 @@ struct ApplicationTalkingTestSuite : ApplicationConnectedTestSuite
     {
         shallHandleCallAccept();
     }
+};
 
 struct ApplicationCallTestSuite : ApplicationConnectedTestSuite
 {
@@ -174,6 +175,7 @@ struct ApplicationCallTestSuite : ApplicationConnectedTestSuite
         EXPECT_CALL(userPortMock, setHomeCallback(_));
         
         objectUnderTest.handleCallRequest(PEER_PHONE_NUMBER);
+    }
 
     void shallHandleCallTalk()
     {
@@ -253,12 +255,12 @@ TEST_F(ApplicationCallTestSuite, shallHandleIncomingCallRequest)
 //     shallHandleCallDropped();
 // }
 
-TEST_F(ApplicationTalkingTestSuite, shallHandleCallTalk)
+TEST_F(ApplicationCallTestSuite, shallHandleCallTalk)
 {
     shallHandleCallTalk();
 }
 
-TEST_F(ApplicationTalkingTestSuite, shallHandleSms)
+TEST_F(ApplicationConnectedTestSuite, shallHandleSms)
 {
     shallHandleSms();
 }
