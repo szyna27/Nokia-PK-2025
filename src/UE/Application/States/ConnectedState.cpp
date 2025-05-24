@@ -162,12 +162,6 @@ void ConnectedState::dropCall(){
     changeMode(MAIN_MENU);
 }
 
-void ConnectedState::handleTimeout()
-{
-    logger.logInfo("Received timeout");
-    dropCall();
-}
-
 void ConnectedState::dropCall(){
     auto &dialMenu = context.user.getDialMode();
     PhoneNumber phoneNumber = dialMenu.getPhoneNumber();
