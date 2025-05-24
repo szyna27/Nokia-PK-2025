@@ -14,5 +14,6 @@ public:
     void sendCallTalk();
     void callDropped();
     void handleCallDropped(common::PhoneNumber from);
+    void handleTimeout() override;
 };
 }
