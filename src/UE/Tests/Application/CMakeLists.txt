@@ -4,6 +4,8 @@ cmake_minimum_required(VERSION 3.12)
 aux_source_directory(. SRC_LIST)
 aux_source_directory(Mocks SRC_LIST)
 aux_source_directory(Ports SRC_LIST)
+aux_source_directory(SMS SRC_LIST)
+aux_source_directory(States SRC_LIST)
 include_directories(${COMMON_DIR}/Tests)
 include_directories(${UE_DIR}/Tests)
 

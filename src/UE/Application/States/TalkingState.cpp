@@ -9,7 +9,7 @@ TalkingState::TalkingState(Context &context, PhoneNumber from)
     : BaseState(context, "TalkingState"), peerNumber(from)
 {
     context.user.showTalking();
-    context.user.setHomeCallback([this] { returnToConnectedState(); });
+    context.user.setHomeCallback([this] { nullptr; });
     logger.logDebug("Entering TalkingState");
     context.user.setAcceptCallback([this] { sendCallTalk(); });
     context.user.setRejectCallback([this] { callDropped(); });

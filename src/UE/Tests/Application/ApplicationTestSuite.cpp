@@ -120,6 +120,7 @@ struct ApplicationConnectedTestSuite : ApplicationConnectingTestSuite
         EXPECT_CALL(userPortMock, setRejectCallback(_));
         EXPECT_CALL(timerPortMock, startTimer(30000ms));
 
+
         objectUnderTest.handleCallAccept(PEER_PHONE_NUMBER);
     }
 
@@ -149,7 +150,6 @@ struct ApplicationConnectedTestSuite : ApplicationConnectingTestSuite
         objectUnderTest.handleSMS(PEER_PHONE_NUMBER, message);
     }
 
-
 };
 
 struct ApplicationTalkingTestSuite : ApplicationConnectedTestSuite
@@ -157,6 +157,24 @@ struct ApplicationTalkingTestSuite : ApplicationConnectedTestSuite
     ApplicationTalkingTestSuite()
     {
         shallHandleCallAccept();
+    }
+};
+
+struct ApplicationCallTestSuite : ApplicationConnectedTestSuite
+{
+    void shallSendCallRequest()
+    {
+        EXPECT_CALL(btsPortMock, sendCallRequest(PEER_PHONE_NUMBER));
+        btsPortMock.sendCallRequest(PEER_PHONE_NUMBER);
+    }
+    
+    void shallHandleIncomingCallRequest()
+    {
+        EXPECT_CALL(userPortMock, setAcceptCallback(_));
+        EXPECT_CALL(userPortMock, setRejectCallback(_));
+        EXPECT_CALL(userPortMock, setHomeCallback(_));
+        
+        objectUnderTest.handleCallRequest(PEER_PHONE_NUMBER);
     }
 
     void shallHandleCallTalk()
@@ -217,12 +235,32 @@ TEST_F(ApplicationConnectedTestSuite, shallHandleCallAccept)
     shallHandleCallAccept();
 }
 
-TEST_F(ApplicationTalkingTestSuite, shallHandleCallTalk)
+TEST_F(ApplicationCallTestSuite, shallSendCallRequest)
+{
+    shallSendCallRequest();
+}
+
+TEST_F(ApplicationCallTestSuite, shallHandleIncomingCallRequest)
+{
+    shallHandleIncomingCallRequest();
+}
+
+// TEST_F(ApplicationConnectedTestSuite, shallHandleTimeoutFromConnected)
+// {
+//     shallHandleTimeout();
+// }
+
+// TEST_F(ApplicationTalkingTestSuite, shallHandleCallDropped)
+// {
+//     shallHandleCallDropped();
+// }
+
+TEST_F(ApplicationCallTestSuite, shallHandleCallTalk)
 {
     shallHandleCallTalk();
 }
 
-TEST_F(ApplicationTalkingTestSuite, shallHandleSms)
+TEST_F(ApplicationConnectedTestSuite, shallHandleSms)
 {
     shallHandleSms();
 }
