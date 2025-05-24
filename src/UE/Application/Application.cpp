@@ -46,9 +46,9 @@ void Application::handleDisconnect()
     context.state->handleDisconnect(); 
 }
 
-void Application::handleCallTalk(common::PhoneNumber from)
+void Application::handleCallTalk(const std::string message)
 {
-    context.state->handleCallTalk(from);
+    context.state->handleCallTalk(message);
 }
 
 void Application::handleCallAccept(common::PhoneNumber from)
@@ -82,5 +82,6 @@ void Application::handleUIBack()
 {
     context.state->handleUIBack();
 }
+
 } // namespace ue
 

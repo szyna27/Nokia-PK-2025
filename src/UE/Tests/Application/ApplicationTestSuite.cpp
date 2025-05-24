@@ -140,6 +140,7 @@ struct ApplicationConnectedTestSuite : ApplicationConnectingTestSuite
 
         objectUnderTest.handleCallDropped(PEER_PHONE_NUMBER);
     }
+    
 
     void shallHandleSms()
     {
@@ -155,6 +156,17 @@ struct ApplicationTalkingTestSuite : ApplicationConnectedTestSuite
     ApplicationTalkingTestSuite()
     {
         shallHandleCallAccept();
+    }
+
+    void shallHandleCallTalk()
+    {
+        EXPECT_CALL(userPortMock, getCallMode()).WillOnce(ReturnRef(callModeMock));
+        EXPECT_CALL(timerPortMock, stopTimer());
+        EXPECT_CALL(timerPortMock, startTimer(30000ms));
+        EXPECT_CALL(callModeMock, clearIncomingText());
+        EXPECT_CALL(callModeMock, appendIncomingText("Hello"));
+
+        objectUnderTest.handleCallTalk("Hello");
     }
 };
 
@@ -205,17 +217,14 @@ TEST_F(ApplicationConnectedTestSuite, shallHandleCallAccept)
     shallHandleCallAccept();
 }
 
-// TEST_F(ApplicationConnectedTestSuite, shallHandleTimeoutFromConnected)
-// {
-//     shallHandleTimeout();
-// }
+TEST_F(ApplicationTalkingTestSuite, shallHandleCallTalk)
+{
+    shallHandleCallTalk();
+}
 
-// TEST_F(ApplicationTalkingTestSuite, shallHandleCallDropped)
-// {
-//     shallHandleCallDropped();
-// }
 TEST_F(ApplicationTalkingTestSuite, shallHandleSms)
 {
     shallHandleSms();
 }
+
 }
