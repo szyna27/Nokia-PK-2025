@@ -152,6 +152,24 @@ struct ApplicationTalkingTestSuite : ApplicationConnectedTestSuite
 };
 
 
+struct ApplicationCallTestSuite : ApplicationConnectedTestSuite
+{
+    void shallSendCallRequest()
+    {
+        EXPECT_CALL(btsPortMock, sendCallRequest(PEER_PHONE_NUMBER));
+        btsPortMock.sendCallRequest(PEER_PHONE_NUMBER);
+    }
+    
+    void shallHandleIncomingCallRequest()
+    {
+        EXPECT_CALL(userPortMock, setAcceptCallback(_));
+        EXPECT_CALL(userPortMock, setRejectCallback(_));
+        EXPECT_CALL(userPortMock, setHomeCallback(_));
+        
+        objectUnderTest.handleCallRequest(PEER_PHONE_NUMBER);
+    }
+};
+
 
 TEST_F(ApplicationNotConnectedTestSuite, shallHandleSibMessage)
 {
@@ -197,6 +215,17 @@ TEST_F(ApplicationConnectedTestSuite, shallHandleCallAccept)
 {
     shallHandleCallAccept();
 }
+
+TEST_F(ApplicationCallTestSuite, shallSendCallRequest)
+{
+    shallSendCallRequest();
+}
+
+TEST_F(ApplicationCallTestSuite, shallHandleIncomingCallRequest)
+{
+    shallHandleIncomingCallRequest();
+}
+
 
 // TEST_F(ApplicationConnectedTestSuite, shallHandleTimeoutFromConnected)
 // {
