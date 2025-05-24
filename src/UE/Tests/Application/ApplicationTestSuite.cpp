@@ -118,6 +118,8 @@ struct ApplicationConnectedTestSuite : ApplicationConnectingTestSuite
         EXPECT_CALL(userPortMock, setHomeCallback(_));
         EXPECT_CALL(userPortMock, setAcceptCallback(_));
         EXPECT_CALL(userPortMock, setRejectCallback(_));
+        EXPECT_CALL(timerPortMock, startTimer(30000ms));
+
 
         objectUnderTest.handleCallAccept(PEER_PHONE_NUMBER);
     }
@@ -141,6 +143,13 @@ struct ApplicationConnectedTestSuite : ApplicationConnectingTestSuite
         objectUnderTest.handleCallDropped(PEER_PHONE_NUMBER);
     }
 
+    void shallHandleSms()
+    {
+        const std::string message = "Hello, this is a test SMS!";
+
+        objectUnderTest.handleSMS(PEER_PHONE_NUMBER, message);
+    }
+
 };
 
 struct ApplicationTalkingTestSuite : ApplicationConnectedTestSuite
@@ -149,8 +158,6 @@ struct ApplicationTalkingTestSuite : ApplicationConnectedTestSuite
     {
         shallHandleCallAccept();
     }
-};
-
 
 struct ApplicationCallTestSuite : ApplicationConnectedTestSuite
 {
@@ -167,8 +174,18 @@ struct ApplicationCallTestSuite : ApplicationConnectedTestSuite
         EXPECT_CALL(userPortMock, setHomeCallback(_));
         
         objectUnderTest.handleCallRequest(PEER_PHONE_NUMBER);
+
+    void shallHandleCallTalk()
+    {
+        EXPECT_CALL(userPortMock, getCallMode()).WillOnce(ReturnRef(callModeMock));
+        EXPECT_CALL(timerPortMock, stopTimer());
+        EXPECT_CALL(timerPortMock, startTimer(30000ms));
+        EXPECT_CALL(callModeMock, clearIncomingText());
+        EXPECT_CALL(callModeMock, appendIncomingText("Hello"));
+        objectUnderTest.handleCallTalk("Hello");
     }
 };
+
 
 
 TEST_F(ApplicationNotConnectedTestSuite, shallHandleSibMessage)
@@ -226,7 +243,6 @@ TEST_F(ApplicationCallTestSuite, shallHandleIncomingCallRequest)
     shallHandleIncomingCallRequest();
 }
 
-
 // TEST_F(ApplicationConnectedTestSuite, shallHandleTimeoutFromConnected)
 // {
 //     shallHandleTimeout();
@@ -236,4 +252,15 @@ TEST_F(ApplicationCallTestSuite, shallHandleIncomingCallRequest)
 // {
 //     shallHandleCallDropped();
 // }
+
+TEST_F(ApplicationTalkingTestSuite, shallHandleCallTalk)
+{
+    shallHandleCallTalk();
+}
+
+TEST_F(ApplicationTalkingTestSuite, shallHandleSms)
+{
+    shallHandleSms();
+}
+
 }

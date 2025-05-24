@@ -1,5 +1,5 @@
 #pragma once
-#include "BaseState.hpp"
+#include "ConnectedState.hpp"
 #include <vector>
 #include <string>
 #include <map>
@@ -8,7 +8,7 @@
 
 namespace ue
 {
-    class ViewSMSListState : public BaseState
+    class ViewSMSListState : public ConnectedState
     {
         public:
             ViewSMSListState(Context &context);

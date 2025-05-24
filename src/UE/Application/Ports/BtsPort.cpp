@@ -85,7 +85,7 @@ void BtsPort::handleMessage(BinaryMessage msg)
         {
             std::string text = reader.readRemainingText();
             logger.logInfo("Call talk from: ", from, ", text: ", text);
-            handler->handleCallTalk(from);
+            handler->handleCallTalk(text);
             break;
         }
         case common::MessageId::UnknownRecipient:
@@ -162,13 +162,13 @@ void BtsPort::sendCallDrop(common::PhoneNumber receiver)
     transport.sendMessage(msg.getMessage());
 }
 
-void BtsPort::sendCallTalk(common::PhoneNumber receiver)
+void BtsPort::sendCallTalk(common::PhoneNumber receiver, std::string text)
 {
     logger.logDebug("sendCallTalk from: ", phoneNumber, " to: ", receiver);
     common::OutgoingMessage msg{common::MessageId::CallTalk,
                                 phoneNumber,
                                 receiver};
-    // msg.writeText(text);
+    msg.writeText(text);
     transport.sendMessage(msg.getMessage());
 }
 

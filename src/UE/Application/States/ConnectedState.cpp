@@ -110,6 +110,9 @@ void ConnectedState::sendCallRequest()
 void ConnectedState::handleCallRequest(PhoneNumber from)
 {
     logger.logInfo("Received call request from: ", from);
+    changeMode(DIAL);
+     context.user.getCallMode().clearIncomingText();
+    context.user.getCallMode().appendIncomingText("Incoming call from: " + std::to_string(from.value));
     context.user.setAcceptCallback([this, from] { sendCallAccept(from); });
     context.user.setRejectCallback([this, from] { sendCallDrop(from); });
     context.user.setHomeCallback([this] { nullptr; });
@@ -120,6 +123,7 @@ void ConnectedState::sendCallAccept(PhoneNumber from)
     logger.logInfo("Sending call accept");
     context.bts.sendCallAccept(from);
     context.setState<TalkingState>(from);
+    context.timer.startTimer(std::chrono::milliseconds(30000));
 }
 
 void ConnectedState::sendCallDrop(PhoneNumber from)
@@ -141,6 +145,21 @@ void ConnectedState::handleCallAccept(PhoneNumber from)
     context.timer.stopTimer();
     logger.logInfo("Received call accept from: ", from);
     context.setState<TalkingState>(from);
+    context.timer.startTimer(std::chrono::milliseconds(30000));
+}
+
+void ConnectedState::handleTimeout()
+{
+    logger.logInfo("Received timeout");
+    dropCall();
+}
+
+void ConnectedState::dropCall(){
+    auto &dialMenu = context.user.getDialMode();
+    PhoneNumber phoneNumber = dialMenu.getPhoneNumber();
+    logger.logInfo("Dropping outgoing call request to: ", phoneNumber);
+    context.bts.sendCallDrop(phoneNumber);
+    changeMode(MAIN_MENU);
 }
 
 void ConnectedState::handleTimeout()

@@ -22,7 +22,7 @@ public:
     void handleAttachAccept() override;
     void handleAttachReject() override;
     void handleDisconnect() override;
-    void handleCallTalk(common::PhoneNumber) override;
+    void handleCallTalk(const std::string message) override;
     void handleCallAccept(common::PhoneNumber) override;
     void handleCallDropped(common::PhoneNumber) override;
     void handleSMS(common::PhoneNumber from, const std::string& message) override;

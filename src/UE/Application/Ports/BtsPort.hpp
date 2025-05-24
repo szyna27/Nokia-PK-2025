@@ -22,7 +22,7 @@ public:
     void sendCallRequest(common::PhoneNumber) override;
     void sendCallAccept(common::PhoneNumber) override;
     void sendCallDrop(common::PhoneNumber) override;
-    void sendCallTalk(common::PhoneNumber) override;
+    void sendCallTalk(common::PhoneNumber, std::string text) override;
 
 private:
     void handleMessage(BinaryMessage msg);

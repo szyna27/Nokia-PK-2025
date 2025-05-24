@@ -40,9 +40,9 @@ void BaseState::handleDisconnect()
     logger.logError("Unexpected: handleDisconnect");
 }
 
-void BaseState::handleCallTalk(common::PhoneNumber from)
+void BaseState::handleCallTalk(std::string message)
 {
-    logger.logError("Unexpected: handleCallTalk: ", from);
+    logger.logError("Unexpected: handleCallTalk with message: ", message);
 }
 
 void BaseState::handleCallAccept(common::PhoneNumber from)

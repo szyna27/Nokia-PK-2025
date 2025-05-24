@@ -10,7 +10,7 @@ namespace ue
 {
 
 ViewSMSListState::ViewSMSListState(Context &context)
-    : BaseState(context, "ViewSMSListState")
+    : ConnectedState(context)
 {
     showSMSList();
 }
