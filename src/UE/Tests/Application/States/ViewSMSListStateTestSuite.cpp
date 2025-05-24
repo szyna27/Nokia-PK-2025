@@ -46,6 +46,23 @@ protected:
         
         EXPECT_CALL(userPortMock, setItemSelectedCallback(_))
             .Times(AnyNumber());
+            
+        // Additional mock expectations to handle underlying state behavior
+        EXPECT_CALL(userPortMock, showConnected())
+            .Times(AnyNumber());
+            
+        EXPECT_CALL(userPortMock, showMainMenu())
+            .Times(AnyNumber());
+            
+        EXPECT_CALL(userPortMock, setAcceptCallback(_))
+            .Times(AnyNumber());
+            
+        EXPECT_CALL(userPortMock, setRejectCallback(_))
+            .Times(AnyNumber());
+            
+        // Setup for ViewSingleSmsState transition
+        EXPECT_CALL(userPortMock, getViewSmsMode())
+            .Times(AnyNumber());
     }
 };
 
@@ -63,7 +80,7 @@ TEST_F(ViewSMSListStateTestSuite, shallDisplaySMSListWithReadStatus)
     // Add a test SMS to the database
     smsDB.addSMS(PHONE_NUMBER, MESSAGE_TEXT);
     
-    // Expect list item with [NEW] status
+    // Expect list item with unread status (NEW)
     EXPECT_CALL(listViewModeMock, addSelectionListItem(HasSubstr("[NEW]"), _));
     
     // Create the state
@@ -73,10 +90,14 @@ TEST_F(ViewSMSListStateTestSuite, shallDisplaySMSListWithReadStatus)
     const auto& allSms = smsDB.getAllSMS();
     smsDB.markSmsAsReadById(allSms[0].getId());
     
-    // Recreate state to refresh view
-    // Expect list item with [Read] status
+    // Clear previous expectations
+    testing::Mock::VerifyAndClearExpectations(&listViewModeMock);
+    
+    // Setup new expectations
+    EXPECT_CALL(listViewModeMock, clearSelectionList());
     EXPECT_CALL(listViewModeMock, addSelectionListItem(HasSubstr("[Read]"), _));
     
+    // Refresh view by creating a new state
     ViewSMSListState objectUnderTest2(context);
 }
 
@@ -86,8 +107,11 @@ TEST_F(ViewSMSListStateTestSuite, shallHandleNewSMSWhileViewingList)
     EXPECT_CALL(listViewModeMock, addSelectionListItem(HasSubstr("No messages"), _));
     ViewSMSListState objectUnderTest(context);
     
-    // Receive new SMS while in this state
+    // Clear previous expectations
+    testing::Mock::VerifyAndClearExpectations(&listViewModeMock);
+    
     // Expect list refresh with new SMS
+    EXPECT_CALL(listViewModeMock, clearSelectionList());
     EXPECT_CALL(listViewModeMock, addSelectionListItem(HasSubstr("[NEW]"), _));
     
     // Trigger SMS reception
@@ -96,29 +120,26 @@ TEST_F(ViewSMSListStateTestSuite, shallHandleNewSMSWhileViewingList)
 
 TEST_F(ViewSMSListStateTestSuite, shallNavigateToSingleSMSViewOnSelection)
 {
-    // This test is just verifying that we can create the state and call handleUIAction
-    // It doesn't need to actually verify state transition since that would require
-    // mocking more of the Context internals
+    // Setup expectations for listViewModeMock 
+    // including the item that will be displayed in the list
+    EXPECT_CALL(listViewModeMock, addSelectionListItem(_, _))
+        .Times(AnyNumber());
     
     // Add a test SMS to the database
     smsDB.addSMS(PHONE_NUMBER, MESSAGE_TEXT);
     
-    // Setup mock for list item
-    EXPECT_CALL(listViewModeMock, addSelectionListItem(_, _))
-        .Times(AnyNumber());
-    
-    // Additional expectations for callbacks that get invoked
-    EXPECT_CALL(userPortMock, setRejectCallback(_))
-        .Times(AnyNumber());
-    
-    EXPECT_CALL(userPortMock, setAcceptCallback(_))
-        .Times(AnyNumber());
-    
     // Create the state
     ViewSMSListState objectUnderTest(context);
     
-    // Just to make sure the test passes, we'll skip the actual UI action which
-    // would try to transition to another state
+    // Mark the SMS as read to test both states
+    const auto& allSms = smsDB.getAllSMS();
+    smsDB.markSmsAsReadById(allSms[0].getId());
+    
+    // This test only verifies that the handleUIAction function
+    // doesn't crash when given a valid item index
+    ASSERT_NO_THROW({
+        objectUnderTest.handleUIAction(0);
+    });
 }
 
 } // namespace ue
