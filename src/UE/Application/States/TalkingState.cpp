@@ -1,5 +1,6 @@
 #include "TalkingState.hpp"
 #include "ConnectedState.hpp"
+#include "Ports/TimerPort.hpp"
 
 namespace ue
 {
@@ -36,6 +37,7 @@ void TalkingState::handleCallDropped(PhoneNumber from)
 void TalkingState::sendCallTalk()
 {
     IUeGui::ICallMode& callMode = context.user.getCallMode();
+    
     auto message = callMode.getOutgoingText();
 
     if(message.empty()){
@@ -64,6 +66,12 @@ void TalkingState::handleCallTalk(const std::string message)
     callMode.clearIncomingText();
     callMode.appendIncomingText(message);
 
+}
+
+void TalkingState::handleTimeout()
+{
+    logger.logInfo("Received timeout");
+    callDropped();
 }
 
 }

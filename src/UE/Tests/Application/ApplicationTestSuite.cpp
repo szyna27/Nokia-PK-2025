@@ -118,6 +118,7 @@ struct ApplicationConnectedTestSuite : ApplicationConnectingTestSuite
         EXPECT_CALL(userPortMock, setHomeCallback(_));
         EXPECT_CALL(userPortMock, setAcceptCallback(_));
         EXPECT_CALL(userPortMock, setRejectCallback(_));
+        EXPECT_CALL(timerPortMock, startTimer(30000ms));
 
         objectUnderTest.handleCallAccept(PEER_PHONE_NUMBER);
     }

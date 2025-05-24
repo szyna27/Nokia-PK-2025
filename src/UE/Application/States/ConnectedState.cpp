@@ -123,6 +123,7 @@ void ConnectedState::sendCallAccept(PhoneNumber from)
     logger.logInfo("Sending call accept");
     context.bts.sendCallAccept(from);
     context.setState<TalkingState>(from);
+    context.timer.startTimer(std::chrono::milliseconds(30000));
 }
 
 void ConnectedState::sendCallDrop(PhoneNumber from)
@@ -144,6 +145,7 @@ void ConnectedState::handleCallAccept(PhoneNumber from)
     context.timer.stopTimer();
     logger.logInfo("Received call accept from: ", from);
     context.setState<TalkingState>(from);
+    context.timer.startTimer(std::chrono::milliseconds(30000));
 }
 
 void ConnectedState::handleTimeout()
