@@ -8,7 +8,6 @@ namespace ue
 TalkingState::TalkingState(Context &context, PhoneNumber from)
     : BaseState(context, "TalkingState"), peerNumber(from)
 {
-    context.timer.startTimer(std::chrono::milliseconds(30000));
     context.user.showTalking();
     context.user.setHomeCallback([this] { returnToConnectedState(); });
     logger.logDebug("Entering TalkingState");
