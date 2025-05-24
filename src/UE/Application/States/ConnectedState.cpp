@@ -162,14 +162,6 @@ void ConnectedState::dropCall(){
     changeMode(MAIN_MENU);
 }
 
-void ConnectedState::dropCall(){
-    auto &dialMenu = context.user.getDialMode();
-    PhoneNumber phoneNumber = dialMenu.getPhoneNumber();
-    logger.logInfo("Dropping outgoing call request to: ", phoneNumber);
-    context.bts.sendCallDrop(phoneNumber);
-    changeMode(MAIN_MENU);
-}
-
 void ConnectedState::handleUIAction(std::optional<std::size_t> selectedIndex)
 {
     if (!selectedIndex.has_value())
