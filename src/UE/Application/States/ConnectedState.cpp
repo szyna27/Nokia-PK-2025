@@ -116,7 +116,6 @@ void ConnectedState::handleCallRequest(PhoneNumber from)
 
 void ConnectedState::sendCallAccept(PhoneNumber from)
 {
-    context.timer.stopTimer();
     logger.logInfo("Sending call accept");
     context.bts.sendCallAccept(from);
     context.setState<TalkingState>(from);
@@ -124,7 +123,6 @@ void ConnectedState::sendCallAccept(PhoneNumber from)
 
 void ConnectedState::sendCallDrop(PhoneNumber from)
 {
-    context.timer.stopTimer();
     logger.logInfo("Sending call drop");
     context.bts.sendCallDrop(from);
     context.user.setHomeCallback([this] { changeMode(MAIN_MENU); });
