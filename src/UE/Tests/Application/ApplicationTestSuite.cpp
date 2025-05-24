@@ -140,7 +140,6 @@ struct ApplicationConnectedTestSuite : ApplicationConnectingTestSuite
 
         objectUnderTest.handleCallDropped(PEER_PHONE_NUMBER);
     }
-    
 
     void shallHandleSms()
     {
@@ -148,6 +147,7 @@ struct ApplicationConnectedTestSuite : ApplicationConnectingTestSuite
 
         objectUnderTest.handleSMS(PEER_PHONE_NUMBER, message);
     }
+
 
 };
 
@@ -165,7 +165,6 @@ struct ApplicationTalkingTestSuite : ApplicationConnectedTestSuite
         EXPECT_CALL(timerPortMock, startTimer(30000ms));
         EXPECT_CALL(callModeMock, clearIncomingText());
         EXPECT_CALL(callModeMock, appendIncomingText("Hello"));
-
         objectUnderTest.handleCallTalk("Hello");
     }
 };

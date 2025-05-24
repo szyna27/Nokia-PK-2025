@@ -110,6 +110,9 @@ void ConnectedState::sendCallRequest()
 void ConnectedState::handleCallRequest(PhoneNumber from)
 {
     logger.logInfo("Received call request from: ", from);
+    changeMode(DIAL);
+     context.user.getCallMode().clearIncomingText();
+    context.user.getCallMode().appendIncomingText("Incoming call from: " + std::to_string(from.value));
     context.user.setAcceptCallback([this, from] { sendCallAccept(from); });
     context.user.setRejectCallback([this, from] { sendCallDrop(from); });
     context.user.setHomeCallback([this] { nullptr; });

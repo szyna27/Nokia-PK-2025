@@ -27,8 +27,8 @@ public:
     void selectMode(IUeGui::IListViewMode& menu);
 
     // handle events
-    void handleDisconnect() override;
-    void handleSMS(common::PhoneNumber from, const std::string& message) override;
+    virtual void handleDisconnect() override;
+    virtual void handleSMS(common::PhoneNumber from, const std::string& message) override;
     void handleCallRequest(common::PhoneNumber from) override;
     void handleCallAccept(common::PhoneNumber from);
     void handleCallDropped(common::PhoneNumber from);
@@ -40,8 +40,8 @@ public:
     void sendCallAccept(common::PhoneNumber from);
     void sendCallDrop(common::PhoneNumber from);
     
-    void handleUIAction(std::optional<std::size_t> selectedIndex) override;
-    void handleUIBack() override;
+    virtual void handleUIAction(std::optional<std::size_t> selectedIndex) override;
+    virtual void handleUIBack() override;
 
     void dropCall();
 
