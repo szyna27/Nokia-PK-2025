@@ -45,6 +45,8 @@ public:
 
     void dropCall();
 
+    void dropCall();
+
 private:
     void changeMode(unsigned int mode);
 
