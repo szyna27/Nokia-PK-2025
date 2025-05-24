@@ -116,4 +116,16 @@ TEST_F(BtsPortTestSuite, shallReceiveSMS)
     messageCallback(msg.getMessage());
 }
 
+TEST_F(BtsPortTestSuite, shallSendCallTalk)
+{
+    common::BinaryMessage msg;
+    EXPECT_CALL(transportMock, sendMessage(_)).WillOnce([&msg](auto param) { msg = std::move(param); return true; });
+    objectUnderTest.sendCallTalk(PHONE_NUMBER, "Hello");
+    common::IncomingMessage reader(msg);
+    ASSERT_NO_THROW(EXPECT_EQ(common::MessageId::CallTalk, reader.readMessageId()) );
+    ASSERT_NO_THROW(EXPECT_EQ(PHONE_NUMBER, reader.readPhoneNumber()));
+    ASSERT_NO_THROW(EXPECT_EQ("pHello", reader.readRemainingText()));
+    ASSERT_NO_THROW(reader.checkEndOfMessage());
+}
+
 }

@@ -82,5 +82,6 @@ void Application::handleUIBack()
 {
     context.state->handleUIBack();
 }
+
 } // namespace ue
 
