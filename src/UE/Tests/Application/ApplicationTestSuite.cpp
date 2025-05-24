@@ -142,6 +142,13 @@ struct ApplicationConnectedTestSuite : ApplicationConnectingTestSuite
     }
     
 
+    void shallHandleSms()
+    {
+        const std::string message = "Hello, this is a test SMS!";
+
+        objectUnderTest.handleSMS(PEER_PHONE_NUMBER, message);
+    }
+
 };
 
 struct ApplicationTalkingTestSuite : ApplicationConnectedTestSuite
@@ -215,14 +222,9 @@ TEST_F(ApplicationTalkingTestSuite, shallHandleCallTalk)
     shallHandleCallTalk();
 }
 
-// TEST_F(ApplicationConnectedTestSuite, shallHandleTimeoutFromConnected)
-// {
-//     shallHandleTimeout();
-// }
-
-// TEST_F(ApplicationTalkingTestSuite, shallHandleCallDropped)
-// {
-//     shallHandleCallDropped();
-// }
+TEST_F(ApplicationTalkingTestSuite, shallHandleSms)
+{
+    shallHandleSms();
+}
 
 }
