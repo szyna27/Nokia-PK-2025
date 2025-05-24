@@ -1,8 +1,8 @@
 #pragma once
-
 #include "Messages/PhoneNumber.hpp"
 #include "IUeGui.hpp"
-
+#include <optional>
+#include "SMS/SMSDB.hpp"
 namespace ue
 {
 
@@ -22,8 +22,12 @@ public:
     virtual void showConnected() = 0;
     virtual void showMainMenu() = 0;
     virtual void showComposeSms() = 0;
-    virtual void showViewSms() = 0;
+
+    // SMS views
+    virtual void showViewSms(SMS sms) = 0;
     virtual void showNewSms(bool present) = 0;
+    virtual void showSmsList(const std::vector<ue::SMS>&) = 0;
+
     virtual void showDial() = 0;
     virtual void showTalking() = 0;
 

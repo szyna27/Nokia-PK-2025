@@ -1,6 +1,8 @@
 #include "ConnectedState.hpp"
 #include "NotConnectedState.hpp"
 #include "TalkingState.hpp"
+#include "ViewSMSListState.hpp"
+
 
 using namespace std::chrono_literals;
 
@@ -48,8 +50,7 @@ void ConnectedState::changeMode(unsigned int mode)
 
         case VIEW_SMS:
             logger.logInfo("Changing mode to view SMS");
-            context.user.showViewSms();
-
+            context.setState<ViewSMSListState>();
             break;
 
         case DIAL:
@@ -154,6 +155,31 @@ void ConnectedState::dropCall(){
     logger.logInfo("Dropping outgoing call request to: ", phoneNumber);
     context.bts.sendCallDrop(phoneNumber);
     changeMode(MAIN_MENU);
+}
+
+void ConnectedState::handleUIAction(std::optional<std::size_t> selectedIndex)
+{
+    if (!selectedIndex.has_value())
+    {
+        logger.logError("Unexpected: handleUiAction: no selected index");
+        return;
+    }
+
+    auto index = selectedIndex.value();
+
+    if (index == 1) 
+    {
+        context.setState<ViewSMSListState>();
+        return;
+    }
+
+    logger.logError("Unexpected: handleUiAction");
+
+} 
+
+void ConnectedState::handleUIBack()
+{
+    logger.logInfo("Unexpected: handleUiBack");
 }
 
 }// namespace ue

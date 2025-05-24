@@ -1,7 +1,7 @@
 #include "ConnectingState.hpp"
 #include "ConnectedState.hpp"
 #include "NotConnectedState.hpp"
-
+#include "ViewSMSListState.hpp"
 namespace ue
 {
 

@@ -39,6 +39,9 @@ public:
     void sendCallRequest();
     void sendCallAccept(common::PhoneNumber from);
     void sendCallDrop(common::PhoneNumber from);
+    
+    void handleUIAction(std::optional<std::size_t> selectedIndex) override;
+    void handleUIBack() override;
 
     void dropCall();
 
