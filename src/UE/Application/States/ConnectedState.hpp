@@ -32,6 +32,7 @@ public:
     void handleCallRequest(common::PhoneNumber from) override;
     void handleCallAccept(common::PhoneNumber from);
     void handleCallDropped(common::PhoneNumber from);
+    void handleTimeout() override;
 
     // send events
     void sendSMS();
@@ -41,6 +42,8 @@ public:
     
     void handleUIAction(std::optional<std::size_t> selectedIndex) override;
     void handleUIBack() override;
+
+    void dropCall();
 
 private:
     void changeMode(unsigned int mode);

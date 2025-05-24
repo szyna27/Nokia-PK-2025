@@ -4,6 +4,8 @@
 #include "ViewSMSListState.hpp"
 
 
+using namespace std::chrono_literals;
+
 namespace ue
 {
 
@@ -100,7 +102,9 @@ void ConnectedState::sendCallRequest()
     logger.logInfo("Sending call request");
     auto &dialMenu = context.user.getDialMode();
     PhoneNumber phoneNumber = dialMenu.getPhoneNumber();
+    context.user.setRejectCallback([this, phoneNumber] { sendCallDrop(phoneNumber); });
     context.bts.sendCallRequest(phoneNumber);
+    context.timer.startTimer(60000ms);
 }
 
 void ConnectedState::handleCallRequest(PhoneNumber from)
@@ -108,6 +112,7 @@ void ConnectedState::handleCallRequest(PhoneNumber from)
     logger.logInfo("Received call request from: ", from);
     context.user.setAcceptCallback([this, from] { sendCallAccept(from); });
     context.user.setRejectCallback([this, from] { sendCallDrop(from); });
+    context.user.setHomeCallback([this] { nullptr; });
 }
 
 void ConnectedState::sendCallAccept(PhoneNumber from)
@@ -121,18 +126,35 @@ void ConnectedState::sendCallDrop(PhoneNumber from)
 {
     logger.logInfo("Sending call drop");
     context.bts.sendCallDrop(from);
+    context.user.setHomeCallback([this] { changeMode(MAIN_MENU); });
 }
 
 void ConnectedState::handleCallDropped(PhoneNumber from)
 {
+    context.timer.stopTimer();
     logger.logInfo("Received call dropped from: ", from);
-    context.setState<ConnectedState>();
+    changeMode(MAIN_MENU);
 }
 
 void ConnectedState::handleCallAccept(PhoneNumber from)
 {
+    context.timer.stopTimer();
     logger.logInfo("Received call accept from: ", from);
     context.setState<TalkingState>(from);
+}
+
+void ConnectedState::handleTimeout()
+{
+    logger.logInfo("Received timeout");
+    dropCall();
+}
+
+void ConnectedState::dropCall(){
+    auto &dialMenu = context.user.getDialMode();
+    PhoneNumber phoneNumber = dialMenu.getPhoneNumber();
+    logger.logInfo("Dropping outgoing call request to: ", phoneNumber);
+    context.bts.sendCallDrop(phoneNumber);
+    changeMode(MAIN_MENU);
 }
 
 void ConnectedState::handleUIAction(std::optional<std::size_t> selectedIndex)
@@ -159,4 +181,5 @@ void ConnectedState::handleUIBack()
 {
     logger.logInfo("Unexpected: handleUiBack");
 }
+
 }// namespace ue

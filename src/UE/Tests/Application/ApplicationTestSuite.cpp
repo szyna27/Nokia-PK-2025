@@ -19,6 +19,7 @@ class ApplicationTestSuite : public Test
 {
 protected:
     const common::PhoneNumber PHONE_NUMBER{112};
+    const common::PhoneNumber PEER_PHONE_NUMBER{113};
     const common::BtsId BTS_ID{1024};
     NiceMock<common::ILoggerMock> loggerMock;
 
@@ -26,6 +27,10 @@ protected:
     StrictMock<IUserPortMock> userPortMock;
     StrictMock<ITimerPortMock> timerPortMock;
     StrictMock<IListViewModeMock> listViewModeMock;
+    StrictMock<IDialModeMock> dialModeMock;
+    StrictMock<ISmsComposeModeMock> smsComposeModeMock;
+    StrictMock<ITextModeMock> textModeMock;
+    StrictMock<ICallModeMock> callModeMock;
     SMSDB smsDB = SMSDB();
 
     Application objectUnderTest{PHONE_NUMBER,
@@ -104,8 +109,48 @@ struct ApplicationConnectedTestSuite : ApplicationConnectingTestSuite
     ApplicationConnectedTestSuite()
     {
         shallHandleAttachAccept();
+    }   
+
+    
+    void shallHandleCallAccept(){
+        EXPECT_CALL(timerPortMock, stopTimer());
+        EXPECT_CALL(userPortMock, showTalking());
+        EXPECT_CALL(userPortMock, setHomeCallback(_));
+        EXPECT_CALL(userPortMock, setAcceptCallback(_));
+        EXPECT_CALL(userPortMock, setRejectCallback(_));
+
+        objectUnderTest.handleCallAccept(PEER_PHONE_NUMBER);
+    }
+
+    void shallHandleTimeout(){
+        EXPECT_CALL(userPortMock, getDialMode()).WillOnce(ReturnRef(dialModeMock));
+        EXPECT_CALL(dialModeMock, getPhoneNumber()).WillOnce(Return(PEER_PHONE_NUMBER));
+        EXPECT_CALL(btsPortMock, sendCallDrop(PEER_PHONE_NUMBER));
+        EXPECT_CALL(userPortMock, showMainMenu());
+
+        objectUnderTest.handleTimeout();
+    }
+
+    void shallHandleCallDropped(){
+        EXPECT_CALL(timerPortMock, stopTimer());
+        EXPECT_CALL(userPortMock, showMainMenu());
+        EXPECT_CALL(userPortMock, setHomeCallback(_));
+        EXPECT_CALL(userPortMock, setAcceptCallback(_));
+        EXPECT_CALL(userPortMock, setRejectCallback(_));
+
+        objectUnderTest.handleCallDropped(PEER_PHONE_NUMBER);
+    }
+
+};
+
+struct ApplicationTalkingTestSuite : ApplicationConnectedTestSuite
+{
+    ApplicationTalkingTestSuite()
+    {
+        shallHandleCallAccept();
     }
 };
+
 
 
 TEST_F(ApplicationNotConnectedTestSuite, shallHandleSibMessage)
@@ -148,4 +193,18 @@ TEST_F(ApplicationConnectedTestSuite, shallHandleReconnectFromConnected)
     shallHandleReconnect();
 }
 
+TEST_F(ApplicationConnectedTestSuite, shallHandleCallAccept)
+{
+    shallHandleCallAccept();
+}
+
+// TEST_F(ApplicationConnectedTestSuite, shallHandleTimeoutFromConnected)
+// {
+//     shallHandleTimeout();
+// }
+
+// TEST_F(ApplicationTalkingTestSuite, shallHandleCallDropped)
+// {
+//     shallHandleCallDropped();
+// }
 }
