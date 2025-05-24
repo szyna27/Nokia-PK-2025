@@ -31,10 +31,6 @@ protected:
     StrictMock<ISmsComposeModeMock> smsComposeModeMock;
     StrictMock<ITextModeMock> textModeMock;
     StrictMock<ICallModeMock> callModeMock;
-    StrictMock<IDialModeMock> dialModeMock;
-    StrictMock<ISmsComposeModeMock> smsComposeModeMock;
-    StrictMock<ITextModeMock> textModeMock;
-    StrictMock<ICallModeMock> callModeMock;
     SMSDB smsDB = SMSDB();
 
     Application objectUnderTest{PHONE_NUMBER,
