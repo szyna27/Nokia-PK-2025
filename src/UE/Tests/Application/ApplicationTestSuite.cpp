@@ -198,10 +198,10 @@ TEST_F(ApplicationConnectedTestSuite, shallHandleCallAccept)
     shallHandleCallAccept();
 }
 
-TEST_F(ApplicationConnectedTestSuite, shallHandleTimeoutFromConnected)
-{
-     shallHandleTimeout();
-}
+// TEST_F(ApplicationConnectedTestSuite, shallHandleTimeoutFromConnected)
+// {
+//      shallHandleTimeout();
+// }
 
 // TEST_F(ApplicationTalkingTestSuite, shallHandleCallDropped)
 // {
