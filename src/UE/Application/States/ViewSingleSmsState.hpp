@@ -1,10 +1,10 @@
 #pragma once
-#include "BaseState.hpp"
+#include "ConnectedState.hpp"
 #include <cstdint>
 
 namespace ue
 {
-    class ViewSingleSmsState : public BaseState
+    class ViewSingleSmsState : public ConnectedState
     {
     public:
         ViewSingleSmsState(Context &context, uint64_t smsId);

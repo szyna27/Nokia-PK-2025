@@ -9,7 +9,7 @@ namespace ue
 {
 
 ViewSingleSmsState::ViewSingleSmsState(Context &context, uint64_t smsId)
-    : BaseState(context, "ViewSingleSmsState"), smsId(smsId)
+    : ConnectedState(context), smsId(smsId)
 {
     try {
         auto smsOpt = context.smsDB.getSmsById(smsId);
