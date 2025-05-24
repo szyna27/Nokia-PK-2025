@@ -141,6 +141,13 @@ struct ApplicationConnectedTestSuite : ApplicationConnectingTestSuite
         objectUnderTest.handleCallDropped(PEER_PHONE_NUMBER);
     }
 
+    void shallHandleSms()
+    {
+        const std::string message = "Hello, this is a test SMS!";
+
+        objectUnderTest.handleSMS(PEER_PHONE_NUMBER, message);
+    }
+
 };
 
 struct ApplicationTalkingTestSuite : ApplicationConnectedTestSuite
@@ -207,4 +214,8 @@ TEST_F(ApplicationConnectedTestSuite, shallHandleCallAccept)
 // {
 //     shallHandleCallDropped();
 // }
+TEST_F(ApplicationTalkingTestSuite, shallHandleSms)
+{
+    shallHandleSms();
+}
 }
