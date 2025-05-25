@@ -155,6 +155,9 @@ TEST_F(ViewSingleSmsStateTestSuite, shallHandleInvalidSMSIdGracefully)
     // Expect item selection callback to be set when transitioning to SMS list
     EXPECT_CALL(userPortMock, setItemSelectedCallback(_))
         .Times(AnyNumber());
+
+    EXPECT_CALL(userPortMock, showNewSms(_))
+        .Times(AnyNumber());
     
     // This test just verifies that no exception is thrown and we transition back to list view
     ASSERT_NO_THROW({

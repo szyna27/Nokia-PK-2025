@@ -172,5 +172,10 @@ void BtsPort::sendCallTalk(common::PhoneNumber receiver, std::string text)
     transport.sendMessage(msg.getMessage());
 }
 
+common::PhoneNumber BtsPort::getPhoneNumber() const
+{
+    return phoneNumber;
+}
+
 } // namespace ue
     

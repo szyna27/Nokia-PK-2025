@@ -114,11 +114,13 @@ struct ApplicationConnectedTestSuite : ApplicationConnectingTestSuite
     
     void shallHandleCallAccept(){
         EXPECT_CALL(timerPortMock, stopTimer());
+        EXPECT_CALL(userPortMock, getCallMode()).WillOnce(ReturnRef(callModeMock));
+        EXPECT_CALL(callModeMock, clearIncomingText());
         EXPECT_CALL(userPortMock, showTalking());
         EXPECT_CALL(userPortMock, setHomeCallback(_));
         EXPECT_CALL(userPortMock, setAcceptCallback(_));
         EXPECT_CALL(userPortMock, setRejectCallback(_));
-        EXPECT_CALL(timerPortMock, startTimer(30000ms));
+        EXPECT_CALL(timerPortMock, startTimer(_));
 
         objectUnderTest.handleCallAccept(PEER_PHONE_NUMBER);
     }

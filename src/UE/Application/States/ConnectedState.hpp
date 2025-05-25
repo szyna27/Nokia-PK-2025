@@ -24,6 +24,9 @@ class ConnectedState : public BaseState
 {
 public:
     ConnectedState(Context& context);
+
+    bool isCalling = false;
+
     void selectMode(IUeGui::IListViewMode& menu);
 
     // handle events

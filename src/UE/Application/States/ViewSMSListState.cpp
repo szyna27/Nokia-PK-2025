@@ -12,6 +12,8 @@ namespace ue
 ViewSMSListState::ViewSMSListState(Context &context)
     : ConnectedState(context)
 {
+    context.user.setRejectCallback([this, &context] { context.setState<ConnectedState>(); });
+    context.user.showNewSms(false);
     showSMSList();
 }
 

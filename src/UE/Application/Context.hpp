@@ -22,6 +22,12 @@ struct Context
     {
         state = std::make_unique<State>(*this, std::forward<Arg>(arg)...);
     }
+
+    template <typename State>
+    bool isState() const
+    {
+        return dynamic_cast<State*>(state.get()) != nullptr;
+    }
 };
 
 }
