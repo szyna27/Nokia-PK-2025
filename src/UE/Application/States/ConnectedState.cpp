@@ -45,20 +45,24 @@ void ConnectedState::changeMode(unsigned int mode)
             logger.logInfo("Compose SMS mode");
 
             context.user.setAcceptCallback([this] { sendSMS(); });
+            context.user.setRejectCallback([this] { changeMode(MAIN_MENU); });
 
             break;
 
         case VIEW_SMS:
             logger.logInfo("Changing mode to view SMS");
+            
             context.setState<ViewSMSListState>();
             break;
 
         case DIAL:
+            context.user.getCallMode().clearIncomingText();
             logger.logInfo("Changing mode to dial");
             context.user.showDial();
             logger.logInfo("Dial mode");
             
             context.user.setAcceptCallback([this] { sendCallRequest(); });
+            context.user.setRejectCallback([this] { changeMode(MAIN_MENU); });
             break;
 
         case MAIN_MENU:
@@ -99,19 +103,42 @@ void ConnectedState::handleSMS(PhoneNumber from, const std::string &message)
 
 void ConnectedState::sendCallRequest()
 {
-    logger.logInfo("Sending call request");
     auto &dialMenu = context.user.getDialMode();
-    PhoneNumber phoneNumber = dialMenu.getPhoneNumber();
-    context.user.setRejectCallback([this, phoneNumber] { sendCallDrop(phoneNumber); });
-    context.bts.sendCallRequest(phoneNumber);
+    context.user.getCallMode().clearIncomingText();
+   
+    PhoneNumber toNumber = dialMenu.getPhoneNumber();
+    
+    PhoneNumber fromNumber = context.bts.getPhoneNumber();
+    
+    if(toNumber == fromNumber)
+    {
+        logger.logError("Cannot call yourself");
+        context.setState<ConnectedState>();
+        return;
+    }
+
+    isCalling = true;
+    logger.logInfo("Sending call request");
+    context.user.setRejectCallback([this, toNumber] { sendCallDrop(toNumber); });
+    context.bts.sendCallRequest(toNumber);
+    context.user.setHomeCallback([this] { nullptr; });
     context.timer.startTimer(60000ms);
 }
 
 void ConnectedState::handleCallRequest(PhoneNumber from)
 {
+    if(isCalling){
+        logger.logInfo("Sending call drop");
+        context.bts.sendCallDrop(from);
+
+        logger.logError("Received call request from: ", from, " while already in a call");
+        return;
+    }
+
+    isCalling = true;
     logger.logInfo("Received call request from: ", from);
     changeMode(DIAL);
-     context.user.getCallMode().clearIncomingText();
+    context.user.getCallMode().clearIncomingText();
     context.user.getCallMode().appendIncomingText("Incoming call from: " + std::to_string(from.value));
     context.user.setAcceptCallback([this, from] { sendCallAccept(from); });
     context.user.setRejectCallback([this, from] { sendCallDrop(from); });
@@ -130,19 +157,23 @@ void ConnectedState::sendCallDrop(PhoneNumber from)
 {
     logger.logInfo("Sending call drop");
     context.bts.sendCallDrop(from);
-    context.user.setHomeCallback([this] { changeMode(MAIN_MENU); });
+
+    isCalling = false;
+    context.setState<ConnectedState>();
 }
 
 void ConnectedState::handleCallDropped(PhoneNumber from)
 {
     context.timer.stopTimer();
     logger.logInfo("Received call dropped from: ", from);
+    isCalling = false;
     changeMode(MAIN_MENU);
 }
 
 void ConnectedState::handleCallAccept(PhoneNumber from)
 {
     context.timer.stopTimer();
+    context.user.getCallMode().clearIncomingText();
     logger.logInfo("Received call accept from: ", from);
     context.setState<TalkingState>(from);
     context.timer.startTimer(std::chrono::milliseconds(30000));
@@ -159,6 +190,7 @@ void ConnectedState::dropCall(){
     PhoneNumber phoneNumber = dialMenu.getPhoneNumber();
     logger.logInfo("Dropping outgoing call request to: ", phoneNumber);
     context.bts.sendCallDrop(phoneNumber);
+    isCalling = false;
     changeMode(MAIN_MENU);
 }
 

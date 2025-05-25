@@ -63,6 +63,9 @@ protected:
         // Setup for ViewSingleSmsState transition
         EXPECT_CALL(userPortMock, getViewSmsMode())
             .Times(AnyNumber());
+
+        EXPECT_CALL(userPortMock, showNewSms(_))
+            .Times(AnyNumber());
     }
 };
 

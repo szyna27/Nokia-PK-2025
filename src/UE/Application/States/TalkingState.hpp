@@ -15,5 +15,7 @@ public:
     void callDropped();
     void handleCallDropped(common::PhoneNumber from);
     void handleTimeout() override;
+    void handleUnknownRecipent();
+    void handleCallRequest(common::PhoneNumber from) override;
 };
 }

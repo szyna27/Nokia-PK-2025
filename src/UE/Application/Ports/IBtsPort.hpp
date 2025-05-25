@@ -39,6 +39,8 @@ public:
     virtual void sendCallAccept(common::PhoneNumber) = 0;
     virtual void sendCallDrop(common::PhoneNumber) = 0;
     virtual void sendCallTalk(common::PhoneNumber, std::string text) = 0;
+
+    virtual common::PhoneNumber getPhoneNumber() const = 0;
 };
 
 }
