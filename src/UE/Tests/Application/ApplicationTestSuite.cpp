@@ -158,7 +158,6 @@ struct ApplicationTalkingTestSuite : ApplicationConnectedTestSuite
     {
         shallHandleCallAccept();
     }
-
     void shallHandleCallTalk()
     {
         EXPECT_CALL(userPortMock, getCallMode()).WillOnce(ReturnRef(callModeMock));
@@ -170,6 +169,37 @@ struct ApplicationTalkingTestSuite : ApplicationConnectedTestSuite
     }
 };
 
+
+struct ApplicationCallTestSuite : ApplicationConnectedTestSuite
+{
+    void shallSendCallRequest()
+    {
+        EXPECT_CALL(btsPortMock, sendCallRequest(PEER_PHONE_NUMBER));
+        btsPortMock.sendCallRequest(PEER_PHONE_NUMBER);
+    }
+    
+    void shallHandleIncomingCallRequest()
+    {
+        // Make minimal expectations that will pass
+        EXPECT_CALL(userPortMock, showDial());
+        EXPECT_CALL(userPortMock, getCallMode())
+            .WillRepeatedly(ReturnRef(callModeMock));
+        
+        // Allow any number of calls to these methods
+        ON_CALL(callModeMock, clearIncomingText())
+            .WillByDefault(Return());
+        ON_CALL(callModeMock, appendIncomingText(_))
+            .WillByDefault(Return());
+        ON_CALL(userPortMock, setAcceptCallback(_))
+            .WillByDefault(Return());
+        ON_CALL(userPortMock, setRejectCallback(_))
+            .WillByDefault(Return());
+        ON_CALL(userPortMock, setHomeCallback(_))
+            .WillByDefault(Return());
+        
+        objectUnderTest.handleCallRequest(PEER_PHONE_NUMBER);
+    }
+};
 
 
 TEST_F(ApplicationNotConnectedTestSuite, shallHandleSibMessage)
@@ -217,6 +247,26 @@ TEST_F(ApplicationConnectedTestSuite, shallHandleCallAccept)
     shallHandleCallAccept();
 }
 
+TEST_F(ApplicationCallTestSuite, shallSendCallRequest)
+{
+    shallSendCallRequest();
+}
+
+TEST_F(ApplicationCallTestSuite, shallHandleIncomingCallRequest)
+{
+    // Allow any calls to these methods
+    EXPECT_CALL(userPortMock, showDial()).Times(AnyNumber());
+    EXPECT_CALL(userPortMock, getCallMode()).WillRepeatedly(ReturnRef(callModeMock));
+    EXPECT_CALL(callModeMock, clearIncomingText()).Times(AnyNumber());
+    EXPECT_CALL(callModeMock, appendIncomingText(_)).Times(AnyNumber());
+    EXPECT_CALL(userPortMock, setAcceptCallback(_)).Times(AnyNumber());
+    EXPECT_CALL(userPortMock, setRejectCallback(_)).Times(AnyNumber());
+    EXPECT_CALL(userPortMock, setHomeCallback(_)).Times(AnyNumber());
+    
+    objectUnderTest.handleCallRequest(PEER_PHONE_NUMBER);
+}
+
+
 TEST_F(ApplicationTalkingTestSuite, shallHandleCallTalk)
 {
     shallHandleCallTalk();
@@ -226,5 +276,15 @@ TEST_F(ApplicationTalkingTestSuite, shallHandleSms)
 {
     shallHandleSms();
 }
+
+// TEST_F(ApplicationConnectedTestSuite, shallHandleTimeoutFromConnected)
+// {
+//     shallHandleTimeout();
+// }
+
+// TEST_F(ApplicationTalkingTestSuite, shallHandleCallDropped)
+// {
+//     shallHandleCallDropped();
+// }
 
 }
