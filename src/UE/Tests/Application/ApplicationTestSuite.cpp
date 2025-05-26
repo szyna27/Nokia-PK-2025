@@ -63,10 +63,9 @@ struct ApplicationConnectingTestSuite : ApplicationNotConnectedTestSuite
 
     void shallHandleAttachAccept()
     {
-        EXPECT_CALL(userPortMock, showConnected());
+        EXPECT_CALL(userPortMock, showConnected()).Times(AnyNumber());
         EXPECT_CALL(userPortMock, showMainMenu());
-        EXPECT_CALL(userPortMock, getListViewMode()).WillOnce(ReturnRef(listViewModeMock));
-        EXPECT_CALL(userPortMock, setItemSelectedCallback(_));
+        EXPECT_CALL(userPortMock, getListViewMode()).Times(AnyNumber()).WillRepeatedly(ReturnRef(listViewModeMock));        EXPECT_CALL(userPortMock, setItemSelectedCallback(_));
         EXPECT_CALL(userPortMock, setHomeCallback(_));
         EXPECT_CALL(userPortMock, setAcceptCallback(_));
         EXPECT_CALL(userPortMock, setRejectCallback(_));
@@ -130,13 +129,18 @@ struct ApplicationConnectedTestSuite : ApplicationConnectingTestSuite
         EXPECT_CALL(dialModeMock, getPhoneNumber()).WillOnce(Return(PEER_PHONE_NUMBER));
         EXPECT_CALL(btsPortMock, sendCallDrop(PEER_PHONE_NUMBER));
         EXPECT_CALL(userPortMock, showMainMenu());
-
+        EXPECT_CALL(userPortMock, setItemSelectedCallback(_)).Times(AnyNumber());
+        EXPECT_CALL(userPortMock, setHomeCallback(_)).Times(AnyNumber());
+        EXPECT_CALL(userPortMock, setAcceptCallback(_)).Times(AnyNumber());
+        EXPECT_CALL(userPortMock, setRejectCallback(_)).Times(AnyNumber());
         objectUnderTest.handleTimeout();
     }
 
     void shallHandleCallDropped(){
-        EXPECT_CALL(timerPortMock, stopTimer());
+        //EXPECT_CALL(timerPortMock, stopTimer());
         EXPECT_CALL(userPortMock, showMainMenu());
+        EXPECT_CALL(userPortMock, getListViewMode()).WillOnce(ReturnRef(listViewModeMock));
+        EXPECT_CALL(userPortMock, setItemSelectedCallback(_));
         EXPECT_CALL(userPortMock, setHomeCallback(_));
         EXPECT_CALL(userPortMock, setAcceptCallback(_));
         EXPECT_CALL(userPortMock, setRejectCallback(_));
@@ -151,6 +155,17 @@ struct ApplicationConnectedTestSuite : ApplicationConnectingTestSuite
         objectUnderTest.handleSMS(PEER_PHONE_NUMBER, message);
     }
 
+    void shallHandleCallRequest(){
+        EXPECT_CALL(userPortMock, showDial());
+        EXPECT_CALL(userPortMock, getCallMode()).Times(AnyNumber()).WillRepeatedly(ReturnRef(callModeMock));
+        EXPECT_CALL(callModeMock, clearIncomingText()).Times(AnyNumber());
+        EXPECT_CALL(callModeMock, appendIncomingText(_)).Times(AnyNumber());
+        EXPECT_CALL(userPortMock, setAcceptCallback(_)).Times(2);
+        EXPECT_CALL(userPortMock, setRejectCallback(_)).Times(2);
+        EXPECT_CALL(userPortMock, setHomeCallback(_));
+
+        objectUnderTest.handleCallRequest(PEER_PHONE_NUMBER);
+    }
 
 };
 
@@ -279,14 +294,18 @@ TEST_F(ApplicationTalkingTestSuite, shallHandleSms)
     shallHandleSms();
 }
 
-// TEST_F(ApplicationConnectedTestSuite, shallHandleTimeoutFromConnected)
-// {
-//     shallHandleTimeout();
-// }
+TEST_F(ApplicationConnectedTestSuite, shallHandleTimeoutFromConnected)
+{
+    shallHandleTimeout();
+}
 
-// TEST_F(ApplicationTalkingTestSuite, shallHandleCallDropped)
-// {
-//     shallHandleCallDropped();
-// }
+TEST_F(ApplicationTalkingTestSuite, shallHandleCallDropped)
+{
+    shallHandleCallDropped();
+}
 
+TEST_F(ApplicationConnectedTestSuite, shallHandleCallRequest)
+{
+    shallHandleCallRequest();
+}
 }
