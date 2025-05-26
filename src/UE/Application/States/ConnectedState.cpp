@@ -155,6 +155,7 @@ void ConnectedState::sendCallAccept(PhoneNumber from)
 
 void ConnectedState::sendCallDrop(PhoneNumber from)
 {
+    context.timer.stopTimer();
     logger.logInfo("Sending call drop");
     context.bts.sendCallDrop(from);
 
